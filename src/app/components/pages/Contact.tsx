@@ -32,10 +32,10 @@ export function Contact() {
       </section>
 
       <section className="bg-cream border-t border-border">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-20 grid grid-cols-12 gap-10 items-stretch">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-20 grid grid-cols-1 md:grid-cols-12 gap-10 items-stretch">
           {/* Left column: contact box stacked directly above the image,
               the pair filling the same height as the form on the right */}
-          <div className="col-span-12 md:col-span-5 flex flex-col gap-6">
+          <div className="md:col-span-5 flex flex-col gap-6">
             <div className="border border-border bg-paper p-6 space-y-4 text-left">
               <a
                 href="mailto:contract@kaizenpmconsulting.com"
@@ -66,7 +66,7 @@ export function Contact() {
             </div>
           </div>
 
-          <div className="col-span-12 md:col-span-7">
+          <div className="md:col-span-7">
             {sent ? (
               <div className="bg-paper border border-border p-10 text-center">
                 <span className="rule-red" />

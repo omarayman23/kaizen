@@ -19,8 +19,8 @@ export function ContractVehicles() {
     <div className="fade-up">
       {/* HEADER */}
       <section className="bg-paper">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-20 pb-12 grid grid-cols-12 gap-6">
-          <div className="col-span-12 md:col-span-9">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-20 pb-12 grid grid-cols-1 md:grid-cols-12 gap-6">
+          <div className="md:col-span-9">
             <div className="flex items-center gap-3 mb-6">
               <span className="rule-red" />
               <span className="eyebrow">Projects · Past Performance</span>
@@ -35,8 +35,8 @@ export function ContractVehicles() {
 
       {/* NAICS CODES */}
       <section className="bg-cream border-t border-border">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-20 md:py-24 grid grid-cols-12 gap-10">
-          <div className="col-span-12 md:col-span-8">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-20 md:py-24 grid grid-cols-1 md:grid-cols-12 gap-10">
+          <div className="md:col-span-8">
             <div className="flex items-center gap-3">
               <span className="rule-red" />
               <span className="eyebrow">Capability Codes</span>
@@ -46,7 +46,7 @@ export function ContractVehicles() {
               <em className="italic text-navy"> NAICS codes.</em>
             </h2>
           </div>
-          <div className="col-span-12 md:col-span-4 md:pt-6">
+          <div className="md:col-span-4 md:pt-6">
             <p className="text-ink/70">
               The North American Industry Classification System codes that define where Kaizen is
               qualified to deliver across federal and commercial contracts.
@@ -54,7 +54,7 @@ export function ContractVehicles() {
           </div>
 
           {/* Two-column table: NAICS Code | Industry Title */}
-          <div className="col-span-12">
+          <div className="md:col-span-12">
             <table className="w-full border-collapse text-left">
               <thead>
                 <tr className="border-y border-navy/25">

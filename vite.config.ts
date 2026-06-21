@@ -25,6 +25,9 @@ export default defineConfig({
     tailwindcss(),
   ],
   resolve: {
+    // Force a single copy of React so libraries that call hooks (e.g. motion)
+    // share the app's React instance instead of resolving their own.
+    dedupe: ['react', 'react-dom'],
     alias: {
       // Alias @ to the src directory
       '@': path.resolve(__dirname, './src'),

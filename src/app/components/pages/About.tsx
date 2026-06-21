@@ -41,8 +41,8 @@ export function About({ setPage }: { setPage: (p: Page) => void }) {
     <div className="fade-up">
       {/* HEADER */}
       <section className="bg-paper">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-20 pb-12 grid grid-cols-12 gap-6">
-          <div className="col-span-12 md:col-span-9">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-20 pb-12 grid grid-cols-1 md:grid-cols-12 gap-6">
+          <div className="md:col-span-9">
             <div className="flex items-center gap-3 mb-6">
               <span className="rule-red" />
               <span className="eyebrow">Passionate · Dedicated · Professional</span>
@@ -54,8 +54,8 @@ export function About({ setPage }: { setPage: (p: Page) => void }) {
 
       {/* TABS: Vision / Mission / Philosophy */}
       <section className="bg-paper">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 pb-24 grid grid-cols-12 gap-10">
-          <div className="col-span-12 md:col-span-4">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 pb-24 grid grid-cols-1 md:grid-cols-12 gap-10">
+          <div className="md:col-span-4">
             <div className="md:sticky md:top-[100px] space-y-2 border-l border-border">
               {tabs.map((t) => {
                 const isActive = t.id === tab;
@@ -77,7 +77,7 @@ export function About({ setPage }: { setPage: (p: Page) => void }) {
             </div>
           </div>
 
-          <div className="col-span-12 md:col-span-8">
+          <div className="md:col-span-8">
             <div key={active.id} className="fade-up">
               <span className="eyebrow">Our {active.label}</span>
               {(Array.isArray(active.body) ? active.body : [active.body]).map((para, i) => (
@@ -92,8 +92,8 @@ export function About({ setPage }: { setPage: (p: Page) => void }) {
 
       {/* THE MEANING BEHIND KAIZEN */}
       <section className="bg-cream border-t border-border">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-24 grid grid-cols-12 gap-10 items-stretch">
-          <div className="col-span-12 md:col-span-5 relative flex">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-24 grid grid-cols-1 md:grid-cols-12 gap-10 items-stretch">
+          <div className="md:col-span-5 relative flex">
             <div className="relative w-full min-h-[280px] overflow-hidden">
               <ImageWithFallback
                 src={kaizenImg}
@@ -103,7 +103,7 @@ export function About({ setPage }: { setPage: (p: Page) => void }) {
             </div>
           </div>
 
-          <div className="col-span-12 md:col-span-7">
+          <div className="md:col-span-7">
             <span className="eyebrow">A name with intent</span>
             <h2 className="font-serif mt-3">
               The meaning behind
