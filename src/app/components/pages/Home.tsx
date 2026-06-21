@@ -19,6 +19,9 @@ export function Home({
             src={heroImg}
             alt=""
             className="w-full h-full object-cover"
+            loading="eager"
+            // @ts-expect-error fetchpriority is a valid HTML attribute not yet in the React types here
+            fetchpriority="high"
           />
           <div
             className="absolute inset-0 pointer-events-none"
@@ -97,14 +100,14 @@ export function Home({
               <span className="eyebrow">Why Kaizen</span>
             </div>
             <h2 className="font-serif">
-              Beyond management —
+              Beyond management,
               <em className="italic text-navy"> toward mastery.</em>
             </h2>
             <p className="mt-6 text-ink/75 max-w-2xl">
               We specialize in turning your vision or challenge into a tangible plan of action, and
               leading it through every stage until completion. Working shoulder-to-shoulder with
               your teams, we manage stakeholders, foster cross-functional cooperation, and apply
-              tailored processes and modern tools — so your objectives are met efficiently,
+              tailored processes and modern tools, so your objectives are met efficiently,
               effectively, and with measurable results that exceed expectations.
             </p>
 
@@ -206,10 +209,9 @@ export function Home({
           <h2 className="font-serif text-paper">
             We turn vision into a
             <em className="italic" style={{ color: "var(--gold)", fontStyle: "normal" }}>
-              {" "}tangible plan of action
+              {" "}tangible plan of action,
             </em>{" "}
-            — leading every stage from discovery to continuous improvement, with the discipline
-            federal programs demand.
+            delivered with the discipline federal programs demand.
           </h2>
           <div className="mt-10">
             <button
@@ -245,47 +247,71 @@ function StatsStrip() {
     return () => obs.disconnect();
   }, []);
 
-  const stats: [string, string][] = [
-    ["15+", "Years Experience"],
-    ["200+", "Projects Delivered"],
-    ["100%", "Compliance Rate"],
+  const stats: { value: number; suffix: string; label: string }[] = [
+    { value: 15, suffix: "+", label: "Years Experience" },
+    { value: 200, suffix: "+", label: "Projects Delivered" },
+    { value: 100, suffix: "%", label: "Compliance Rate" },
   ];
 
   return (
-    <section
-      ref={ref}
-      className="bg-cream border-y border-border"
-    >
-      <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-border">
-        {stats.map(([k, v], i) => (
-          <div key={k} className="px-8 py-14 text-center">
-            <div
-              className={`count-rise ${visible ? "is-visible" : ""}`}
-              style={{
-                color: "var(--navy)",
-                fontWeight: 300,
-                fontSize: "clamp(3rem, 6vw, 4.5rem)",
-                lineHeight: 1,
-                letterSpacing: "-0.02em",
-                transitionDelay: `${i * 120}ms`,
-              }}
+    <section ref={ref} className="bg-cream border-y border-border">
+      <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border">
+        {stats.map((s, i) => (
+          <div
+            key={s.label}
+            className={`count-rise px-6 py-6 text-center ${visible ? "is-visible" : ""}`}
+            style={{ transitionDelay: `${i * 120}ms` }}
+          >
+            <span
+              className="font-serif font-semibold text-navy tabular-nums"
+              style={{ fontSize: "var(--text-body)" }}
             >
-              {k}
-            </div>
-            <div
-              className={`count-rise mt-3 ${visible ? "is-visible" : ""}`}
-              style={{
-                color: "var(--navy)",
-                fontWeight: 300,
-                fontSize: "1rem",
-                transitionDelay: `${i * 120 + 100}ms`,
-              }}
-            >
-              {v}
-            </div>
+              <CountUp target={s.value} run={visible} />
+              {s.suffix}
+            </span>{" "}
+            <span className="text-muted-ink" style={{ fontSize: "var(--text-body)" }}>
+              {s.label}
+            </span>
           </div>
         ))}
       </div>
     </section>
   );
+}
+
+/** Animates a number from 0 → target with easeOutCubic when `run` flips true. */
+function CountUp({
+  target,
+  run,
+  duration = 1400,
+}: {
+  target: number;
+  run: boolean;
+  duration?: number;
+}) {
+  const [n, setN] = useState(0);
+
+  useEffect(() => {
+    if (!run) return;
+
+    // Respect users who prefer reduced motion — jump straight to the value.
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      setN(target);
+      return;
+    }
+
+    let raf = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+      setN(Math.round(eased * target));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [run, target, duration]);
+
+  return <>{n}</>;
 }

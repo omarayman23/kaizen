@@ -40,8 +40,8 @@ export const services: ServiceCategory[] = [
     id: "it-modernization",
     title: "IT Modernization",
     short:
-      "Our goal is to help customers achieve a competitive edge in technology advancement by providing seamless integration of systems and platforms — securely and at scale.",
-    long: "Our goal is to help customers achieve a competitive edge in technology advancement by providing seamless integration of systems and platforms — securely and at scale.",
+      "Our goal is to help customers achieve a competitive edge in technology advancement by providing seamless integration of systems and platforms, securely and at scale.",
+    long: "Our goal is to help customers achieve a competitive edge in technology advancement by providing seamless integration of systems and platforms, securely and at scale.",
     tagline: "Our goal is to help customers achieve a competitive edge in technology advancement.",
     bullets: [
       "Digital Transformation",

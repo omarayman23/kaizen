@@ -26,7 +26,7 @@ export function QuickReach({
             fontSize: "0.72rem",
             fontWeight: 600,
           }}
-          aria-label="Quick Reach — Toggle disciplines"
+          aria-label="Quick Reach · Toggle disciplines"
         >
           <span style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
             Quick Reach
