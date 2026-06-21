@@ -23,11 +23,21 @@ export function Home({
             // @ts-expect-error fetchpriority is a valid HTML attribute not yet in the React types here
             fetchpriority="high"
           />
+          {/* Desktop: horizontal wash (text sits in the left columns) */}
           <div
-            className="absolute inset-0 pointer-events-none"
+            className="absolute inset-0 pointer-events-none hidden md:block"
             style={{
               background:
                 "linear-gradient(to right, var(--paper) 0%, var(--paper) 25%, rgba(255,255,255,0.85) 45%, rgba(255,255,255,0.2) 70%, rgba(255,255,255,0) 100%)",
+            }}
+          />
+          {/* Mobile: bottom-up wash so the full-width hero text stays legible
+              over the image */}
+          <div
+            className="absolute inset-0 pointer-events-none md:hidden"
+            style={{
+              background:
+                "linear-gradient(to top, var(--paper) 0%, rgba(255,255,255,0.92) 38%, rgba(255,255,255,0.6) 62%, rgba(255,255,255,0.15) 100%)",
             }}
           />
         </div>
