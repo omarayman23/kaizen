@@ -12,7 +12,7 @@ const navLinks: { id: Page; label: string }[] = [
 export function Footer({ setPage }: { setPage: (p: Page) => void }) {
   return (
     <footer className="bg-paper text-ink border-t border-border">
-      <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-16 md:py-20 flex flex-col md:flex-row md:items-start gap-12 md:gap-20">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-16 md:py-20 flex flex-col items-center md:flex-row md:items-start gap-12 md:gap-20">
 
         {/* Logo + short statement — logo centered directly above the text,
             equal space on both sides */}
