@@ -100,7 +100,7 @@ export function Nav({
                     className="group w-full text-left py-3 md:py-4 border-t border-border flex items-baseline gap-6"
                   >
                     <span
-                      className={`text-[2.6rem] md:text-[4.5rem] leading-none transition-colors ${
+                      className={`text-[1.8rem] md:text-[3.15rem] leading-none transition-colors ${
                         page === l.id ? "text-red" : "text-ink group-hover:text-red"
                       }`}
                       style={{ fontWeight: 200, letterSpacing: "-0.02em" }}

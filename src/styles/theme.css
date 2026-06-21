@@ -6,7 +6,7 @@
   /* ── Type scale: exactly three content sizes ── */
   --text-heading: clamp(1.5rem, 4.2vw, 3.75rem); /* hero / page titles */
   --text-title: clamp(1.5rem, 4vw, 3.25rem);     /* section + capability titles */
-  --text-body: 1rem;                              /* all prose, links, labels */
+  --text-body: 1.0625rem;                         /* all prose, links, labels */
 
   /* Kaizen demo palette */
   --ink: #1b2a4a;
@@ -108,17 +108,38 @@
     border-radius: 0 !important;
   }
 
-  html { font-size: var(--font-size); }
+  html {
+    font-size: var(--font-size);
+    scroll-behavior: smooth;
+    /* Stop iOS Safari from inflating text on rotation, and kill sideways scroll */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    overflow-x: hidden;
+  }
 
   body {
     background: var(--paper);
     color: var(--ink);
     font-family: var(--font-sans);
     font-weight: 300;
+    font-size: var(--text-body);
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
+    max-width: 100%;
+  }
+
+  /* Long words (URLs, headings) should wrap instead of forcing a wider page */
+  h1, h2, h3, h4, p, a, span, li { overflow-wrap: break-word; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 
   /* Never let media break the viewport */
@@ -165,7 +186,7 @@
     margin-bottom: 24px;
   }
   .section-label::before {
-    content: '——';
+    content: '--';
     color: var(--sand);
     font-weight: 700;
   }
@@ -280,11 +301,13 @@
   @media (max-width: 640px) {
     html { font-size: 14px; }
     .pill { padding: 0.7rem 1.2rem; font-size: 0.7rem; }
-    .eyebrow, .section-label span { font-size: 0.95rem; }
+    /* Keep eyebrows small on phones (was 0.95rem — larger than desktop, which
+       caused long uppercase labels to wrap and break alignment) */
+    .eyebrow, .section-label span { font-size: 0.72rem; letter-spacing: 0.1em; }
     img, svg, video { max-width: 100%; height: auto; }
   }
 
-  /* Animated buttons — scale up on hover */
+  /* Animated buttons: scale up on hover */
   .pill-animated {
     transition: transform .35s cubic-bezier(.2,.7,.2,1),
                 background-color .25s,
@@ -298,7 +321,7 @@
   }
   .pill-animated:active { transform: scale(1.02); }
 
-  /* Animated count-up number — slides up + fades when in view */
+  /* Animated count-up number: slides up + fades when in view */
   .count-rise {
     opacity: 0;
     transform: translateY(24px);

@@ -45,7 +45,7 @@ export function About({ setPage }: { setPage: (p: Page) => void }) {
           <div className="col-span-12 md:col-span-9">
             <div className="flex items-center gap-3 mb-6">
               <span className="rule-red" />
-              <span className="eyebrow">Passionate — Dedicated — Professional</span>
+              <span className="eyebrow">Passionate · Dedicated · Professional</span>
             </div>
             <h1 className="font-serif">About Us</h1>
           </div>
@@ -92,13 +92,13 @@ export function About({ setPage }: { setPage: (p: Page) => void }) {
 
       {/* THE MEANING BEHIND KAIZEN */}
       <section className="bg-cream border-t border-border">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-24 grid grid-cols-12 gap-10 items-start">
-          <div className="col-span-12 md:col-span-5 relative">
-            <div className="relative overflow-hidden">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-24 grid grid-cols-12 gap-10 items-stretch">
+          <div className="col-span-12 md:col-span-5 relative flex">
+            <div className="relative w-full min-h-[280px] overflow-hidden">
               <ImageWithFallback
                 src={kaizenImg}
                 alt="Kaizen"
-                className="w-full h-auto object-contain"
+                className="absolute inset-0 w-full h-full object-contain"
               />
             </div>
           </div>
@@ -112,19 +112,19 @@ export function About({ setPage }: { setPage: (p: Page) => void }) {
             <p className="mt-6 text-ink/75">
               The name represents our commitment to continuous improvement and excellence in IT
               project management. We enhance organizational efficiency through iterative process
-              refinement and strategic execution — ensuring sustained growth and success for our
+              refinement and strategic execution, ensuring sustained growth and success for our
               clients.
             </p>
             <p className="mt-4 text-ink/75">
               Kaizen is led by experienced IT Project Management professionals with strong academic
-              backgrounds and industry certifications — PMP and Agile credentials including Release
+              backgrounds and industry certifications, including PMP and Agile credentials such as Release
               Train Engineers, Agile Practitioners and Advanced Scrum Masters. The team has a proven
               track record of managing complex IT projects globally: enterprise solution
               deployments, digital transformation, and large-scale infrastructure.
             </p>
             <p className="mt-4 text-ink/75">
-              Beyond technical expertise, we thrive in the craft of project management — stakeholder
-              communication, risk mitigation and strategic planning — ensuring projects are
+              Beyond technical expertise, we thrive in the craft of project management: stakeholder
+              communication, risk mitigation and strategic planning, ensuring projects are
               delivered on time, within budget and to the highest standards.
             </p>
           </div>
@@ -136,7 +136,7 @@ export function About({ setPage }: { setPage: (p: Page) => void }) {
         <div className="max-w-[1100px] mx-auto px-6 md:px-10 py-24 text-center">
           <span className="eyebrow text-paper/80">Ready to begin?</span>
           <h2 className="font-serif mt-4 text-paper">
-            Let's elevate the project —
+            Let's elevate the project,
             <em className="italic"> together.</em>
           </h2>
           <button

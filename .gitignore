@@ -21,3 +21,6 @@ pnpm-debug.log*
 
 # vercel
 .vercel
+
+# Local pre-optimization image backups (not for VCS)
+originals/

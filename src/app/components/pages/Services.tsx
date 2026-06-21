@@ -27,7 +27,7 @@ export function Services({
           <div className="col-span-12 md:col-span-8">
             <div className="flex items-center gap-3 mb-6">
               <span className="rule-red" />
-              <span className="eyebrow">Capabilities — Practice Areas</span>
+              <span className="eyebrow">Capabilities · Practice Areas</span>
             </div>
             <h1 className="font-serif">
               Our capabilities,
