@@ -14,8 +14,9 @@ export function Footer({ setPage }: { setPage: (p: Page) => void }) {
     <footer className="bg-paper text-ink border-t border-border">
       <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-16 md:py-20 flex flex-col md:flex-row md:items-start gap-12 md:gap-20">
 
-        {/* Logo + short statement — anchored left */}
-        <div className="flex flex-col items-center md:items-start text-center md:text-left max-w-xs">
+        {/* Logo + short statement — logo centered directly above the text,
+            equal space on both sides */}
+        <div className="flex flex-col items-center text-center max-w-xs">
           <button
             onClick={() => setPage("home")}
             className="flex items-center"

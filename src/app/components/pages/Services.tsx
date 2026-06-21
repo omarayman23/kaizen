@@ -23,8 +23,8 @@ export function Services({
     <div className="fade-up">
       {/* Header */}
       <section className="bg-paper">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-20 pb-12 grid grid-cols-12 gap-6">
-          <div className="col-span-12 md:col-span-8">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-20 pb-12 grid grid-cols-1 md:grid-cols-12 gap-6">
+          <div className="md:col-span-8">
             <div className="flex items-center gap-3 mb-6">
               <span className="rule-red" />
               <span className="eyebrow">Capabilities · Practice Areas</span>
@@ -34,7 +34,7 @@ export function Services({
               <em className="italic text-navy"> delivered with precision.</em>
             </h1>
           </div>
-          <div className="col-span-12 md:col-span-4 md:pt-10">
+          <div className="md:col-span-4 md:pt-10">
             <p className="text-ink/70">
               Senior-led teams, deep certification, and a working method we've refined over twelve
               years. Choose where to start.
@@ -74,13 +74,13 @@ export function Services({
             <div
               key={s.id}
               ref={(el) => (refs.current[s.id] = el)}
-              className={`grid grid-cols-12 gap-6 py-16 scroll-mt-32 transition-colors ${
+              className={`grid grid-cols-1 md:grid-cols-12 gap-6 py-16 scroll-mt-32 transition-colors ${
                 i !== services.length - 1 ? "border-b border-border" : ""
               } ${
                 activeCategory === s.id ? "bg-cream-2/40 -mx-6 md:-mx-10 px-6 md:px-10 rounded-sm" : ""
               }`}
             >
-              <div className="col-span-12 md:col-span-4">
+              <div className="md:col-span-4">
                 <div className="md:sticky md:top-[150px]">
                   <div className="flex items-baseline gap-4">
                     <span className="font-serif text-navy text-[2.4rem] leading-none">
@@ -92,7 +92,7 @@ export function Services({
                 </div>
               </div>
 
-              <div className="col-span-12 md:col-span-7 md:col-start-6">
+              <div className="md:col-span-7 md:col-start-6">
                 <p className="font-serif leading-relaxed text-ink">{s.short}</p>
 
                 <div className="mt-8 grid sm:grid-cols-2 gap-x-8 gap-y-4">

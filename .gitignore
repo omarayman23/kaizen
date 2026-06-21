@@ -24,3 +24,6 @@ pnpm-debug.log*
 
 # Local pre-optimization image backups (not for VCS)
 originals/
+
+# claude code local tooling
+.claude/
