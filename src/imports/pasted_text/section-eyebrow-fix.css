@@ -1,0 +1,323 @@
+---
+
+### 4. SECTION EYEBROW LABELS — MISSING SIGNATURE DETAIL
+
+**Your site:** Uses centered horizontal rules with text: `——— HOUSE MOTTO ———` and `SINCE 2024 — VIRGINIA` — centered, symmetrical. Also uses bullet `■` markers in the values list.
+
+**Kaizen demo:** Every section has an eyebrow in the format `—— LABEL TEXT` — left-aligned, with the `——` dash in sand/gold color and the text in small ALL CAPS dark muted ink. This is one of the most recognizable design details.
+
+**Fix:**
+```css
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.section-label::before {
+  content: '——';
+  color: var(--sand);   /* #e2caa4 */
+  font-weight: 700;
+}
+
+.section-label span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted-ink);  /* #718096 */
+}
+```
+
+HTML pattern: `<div class="section-label"><span>WHY KAIZEN</span></div>`
+
+Remove centered `——— HOUSE MOTTO ———` style. Remove `SINCE 2024 — VIRGINIA` centered label. Apply left-aligned eyebrow to ALL sections.
+
+---
+
+### 5. STATS / METRICS STRIP — MISSING ENTIRELY
+
+**Your site:** No stats/numbers section visible.
+
+**Kaizen demo:** Has a prominent 3-column strip immediately below the hero with ultra-light numbers:
+- `15+` YEARS EXPERIENCE
+- `200+` PROJECTS DELIVERED
+- `100%` COMPLIANCE RATE
+
+**Fix — add this section with cream background:**
+```css
+.stats-strip {
+  background: var(--surface-alt);  /* #faf7f1 */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 80px 120px;
+}
+
+.stat-number {
+  font-size: 72px;
+  font-weight: 200;   /* ultra-light — very important */
+  color: var(--navy);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted-ink);
+  margin-top: 8px;
+}
+```
+
+Columns are separated by 1px vertical rules in `var(--line)` (#e6e2da).
+
+---
+
+### 6. VALUES SECTION LAYOUT — SIGNIFICANT DIFFERENCE
+
+**Your site (About page):** Values listed as a simple 2-column bullet list (■ Continuous Improvement, etc.) with small red square bullets. Plain white background. Left half has a contained photo. Right half has the two-column list. Below that is a 3-column "UNLOCK / EMPOWER / FROM CONCEPT" box grid with borders.
+
+**Kaizen demo:** Values presented as a **4-column card grid on a navy background**. Each card has:
+- Numbered index (01, 02, 03, 04) top-left in muted white
+- Thin stroke line icon top-right in muted white
+- Section heading below
+- 1–2 lines of body text
+- Subtle top-border in `--sand` color
+- Card background slightly lighter than section bg
+
+**Fix:**
+```css
+.values-section {
+  background: var(--navy);    /* #1b2a4a — navy, not white */
+  padding: 120px;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;   /* tight gap — cards nearly flush */
+  margin-top: 80px;
+}
+
+.value-card {
+  background: rgba(255,255,255,0.05);
+  border-top: 2px solid var(--sand);   /* gold top border */
+  padding: 40px 32px;
+  color: white;
+}
+
+.value-card .index {
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  font-weight: 300;
+  margin-bottom: 40px;
+}
+
+.value-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 12px;
+}
+
+.value-card p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.6;
+}
+```
+
+Also add the section split headline above the grid (same as Kaizen demo):
+- Left (60%): Large light-weight H2 in white: `"Principles that turn vision into measurable outcomes."`
+- Right (40%): Short body text + `Discover our philosophy ↗` link in sand color
+
+---
+
+### 7. LOGO IN FOOTER — DIFFERENT
+
+**Your site:** Footer uses the full logo lockup with icon + "KAIZEN PM CONSULTING" text stacked. Navy background. Icon is a bold red/white block-style mark.
+
+**Kaizen demo:** Footer uses only the wordmark "KAIZEN" with the K-slash icon — same as the navbar version. Clean, minimal. No "PM CONSULTING" subtitle under it.
+
+**Fix:** Use the same navbar logo in the footer. Remove the stacked icon+text lockup.
+
+---
+
+### 8. FOOTER LAYOUT — MINOR DIFFERENCES
+
+**Your site:** 3 columns — Logo+tagline | Navigation links | Contact info. No bottom bar with copyright + credentials.
+
+**Kaizen demo:** 4 columns — Logo+tagline | EXPLORE links | COMPANY links | CONTACT. Bottom bar has copyright left + "SAM.gov Registered · Small Business" right.
+
+**Fix:**
+- Split the navigation column into two: one for page links (EXPLORE), one for company links (COMPANY)
+- Add bottom bar: `© 2026 Kaizen Project Management & Consulting, LLC. All rights reserved.` | `SAM.gov Registered · Small Business`
+- Add a thin `1px solid var(--line)` separator above the bottom bar
+
+---
+
+### 9. "HOUSE MOTTO" / QUOTE SECTION — NEEDS RESTYLING
+
+**Your site:** Light grey background, centered `——— HOUSE MOTTO ———` label, large centered quote `"Where strategy meets execution, every time."` — partially light/partially bold weight. Red Kaizen icon in a red-bordered box floating top right.
+
+**Kaizen demo:** Similar "Our Promise" section but on cream (`#faf7f1`) background, left-aligned large editorial text, NO centered icon box floating. Uses the eyebrow label `—— OUR PROMISE` in the standard left-aligned format. Below the large text are two plain text links: `Why Kaizen ↗` and `Our Process ↗`.
+
+**Fix:**
+- Change background from `#f0f0f0` grey to `var(--surface-alt)` cream `#faf7f1`
+- Remove the centered horizontal-rule HOUSE MOTTO label → replace with left-aligned `—— OUR PROMISE` eyebrow
+- Remove the floating red-bordered icon box entirely
+- Left-align all text in this section
+- Change quote to large editorial left-aligned H2 in `var(--navy)`, light weight (300)
+- Add two text links below: `Why Kaizen ↗` · `Our Process ↗` in `var(--navy)` with arrow notation
+
+---
+
+### 10. LINK STYLE — ARROW NOTATION
+
+**Your site:** CTAs use button styles. Text links use standard underline or no special treatment.
+
+**Kaizen demo:** ALL text links use arrow suffix notation — no underlines. `↗` for diagonal/external context, `→` for inline navigation. Example: `Discover our philosophy ↗`, `View all capabilities ↗`, `Explore this capability ↗`
+
+**Fix:**
+```css
+.text-link {
+  text-decoration: none;
+  color: var(--navy);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.text-link::after {
+  content: ' ↗';
+}
+
+/* On dark navy backgrounds, sand color */
+.dark-bg .text-link {
+  color: var(--sand);
+}
+```
+
+---
+
+### 11. GHOST BUTTON ON DARK BACKGROUND
+
+**Your site:** On the navy Quick Reach panel, buttons appear with white text/border.
+
+**Kaizen demo:** On all navy backgrounds, ghost buttons use `--sand` (#e2caa4) for both border AND text color — NOT white. This is a critical detail that makes the sand palette feel intentional.
+
+**Fix:**
+```css
+/* Ghost button on dark backgrounds */
+.btn-ghost-dark {
+  background: transparent;
+  border: 1.5px solid var(--sand);
+  color: var(--sand);
+  padding: 14px 28px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.btn-ghost-dark:hover {
+  background: var(--sand);
+  color: var(--navy);
+}
+```
+
+---
+
+### 12. SECTION SPACING — NEEDS MORE BREATHING ROOM
+
+**Your site:** Sections feel compressed with roughly 60–80px vertical padding.
+
+**Kaizen demo:** Sections use 120–160px vertical padding. White space is used aggressively as a design element.
+
+**Fix:**
+```css
+section {
+  padding: 120px 0;
+}
+
+/* Hero gets full viewport height */
+.hero {
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* Inner content max-width with generous gutters */
+.container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 120px;
+}
+```
+
+---
+
+### 13. CAPABILITIES SECTION — NEEDS ACCORDION LAYOUT
+
+**Your site (Capabilities page):** Not visible in current scroll, but based on the nav structure it's a separate page.
+
+**Kaizen demo:** Capabilities on the homepage uses an elegant split accordion: numbered list on the left with thin horizontal dividers, and a navy detail card on the right that updates on hover showing the capability detail + "Explore this capability ↗".
+
+**Fix — implement this interaction:**
+- Left panel: numbered list (01–06) with icons and thin `var(--line)` border-bottom rules between items
+- Right panel: fixed dark navy card (~400px wide) that shows expanded content
+- On hover of each left item: right card updates with capability title, description, and link
+- Right card has a subtle CSS grid/dot texture overlay:
+```css
+  .capability-card {
+    background: var(--navy);
+    background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+```
+
+---
+
+## SECTION C: PRIORITY ORDER FOR IMPLEMENTATION
+
+Tackle changes in this order for maximum visual impact per hour of work:
+
+1. **Font** — Switch to Montserrat, adjust all weights. This alone makes a 40% improvement.
+2. **CSS Variables** — Implement the full token system. Enables everything else.
+3. **Section backgrounds** — Apply the white/cream/navy alternating rhythm.
+4. **Section eyebrow labels** — Add `—— LABEL` pattern to every section. High visual signature.
+5. **Hero** — Convert from split-image to full-bleed photo with gradient. Add sand accent word.
+6. **Stats strip** — Add the 3-stat section with ultra-light numbers.
+7. **Values cards** — Convert bullet list to 4-column navy card grid.
+8. **Spacing** — Increase all section padding to 120px.
+9. **Link style** — Add ↗ arrow notation to all text links.
+10. **Ghost button colors** — Sand on dark, not white.
+11. **Footer** — Split nav column in two, add bottom bar with SAM.gov badge.
+12. **Quote section** — Restyle to left-aligned on cream bg.
+
+---
+
+## SECTION D: QUICK REFERENCE CHEAT SHEET
+
+| Element | Your Site | Target (Kaizen Demo) |
+|---|---|---|
+| Font | Heavy condensed display | Montserrat 200–700 |
+| H1 weight | 900 (ultra bold) | 700 (bold) |
+| H2 weight | Bold | 300 (light) |
+| Hero style | Split: text left, framed photo right | Full bleed photo + gradient |
+| Section bg | All white | White / Cream / Navy alternating |
+| Cream color | Not used | `#faf7f1` |
+| Section labels | Centered `——— LABEL ———` | Left-aligned `—— LABEL` |
+| Label dash color | Red | Sand `#e2caa4` |
+| Values layout | 2-col bullet list | 4-col navy card grid |
+| Stats section | Missing | 3-col strip on cream |
+| H1 accent word | None | Sand `#e2caa4` on one word |
+| Text links | Standard | Arrow suffix `↗` |
+| Ghost btn dark bg | White border/text | Sand `#e2caa4` border/text |
+| Section padding | ~60–80px | 120–160px |
+| Footer columns | 3 | 4 |
+| Footer bottom bar | Missing | Copyright + SAM.gov badge |
+| Quote section bg | Light grey | Cream `#faf7f1` |
+| Quote alignment | Centered | Left-aligned |
+| Floating icon box | Present (quote section) | Removed |
+| Capabilities layout | Standard list | Split accordion with hover detail card |

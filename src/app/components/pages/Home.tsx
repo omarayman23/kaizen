@@ -1,0 +1,291 @@
+import { useEffect, useRef, useState } from "react";
+import { ImageWithFallback } from "../figma/ImageWithFallback";
+import type { Page } from "../Nav";
+import { services } from "../../services";
+import flagImg from "../../../../flag.jpg";
+import heroImg from "../../../../1main.jpg";
+
+export function Home({
+  setPage,
+}: {
+  setPage: (p: Page, opts?: { category?: string }) => void;
+}) {
+  return (
+    <div className="fade-up">
+      {/* HERO */}
+      <section className="relative bg-paper overflow-hidden">
+        <div className="absolute inset-0">
+          <ImageWithFallback
+            src={heroImg}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(to right, var(--paper) 0%, var(--paper) 25%, rgba(255,255,255,0.85) 45%, rgba(255,255,255,0.2) 70%, rgba(255,255,255,0) 100%)",
+            }}
+          />
+        </div>
+
+        <div className="relative max-w-[1400px] mx-auto px-4 md:px-10 pt-12 pb-20 md:pt-28 md:pb-40 grid grid-cols-12 gap-6 items-end min-h-[420px] md:min-h-[600px]">
+          <div className="col-span-12 md:col-span-8 relative z-10">
+            <div className="flex items-center gap-3 mb-8">
+              <span className="rule-red" />
+              <span className="eyebrow">People · Process · Outcomes</span>
+            </div>
+            <h1
+              className="font-serif"
+              style={{
+                fontSize: "clamp(1.5rem, 4.2vw, 3.75rem)",
+                lineHeight: 1.1,
+              }}
+            >
+              Strategy meets execution.{" "}
+              <em
+                className="italic"
+                style={{ color: "var(--gold)", fontStyle: "normal" }}
+              >
+                Every time.
+              </em>
+            </h1>
+            <p
+              className="mt-8 max-w-xl text-ink/80"
+              style={{ lineHeight: 1.55 }}
+            >
+              Continuous improvement woven into every engagement, every milestone, every
+              deliverable.
+            </p>
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <button
+                onClick={() => setPage("services")}
+                className="pill pill-animated"
+                style={{ background: "var(--red)", color: "#fff" }}
+              >
+                Explore Capabilities →
+              </button>
+              <button
+                onClick={() => setPage("contract")}
+                className="pill pill-ghost pill-animated"
+              >
+                Our Work
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <StatsStrip />
+
+      {/* WHY KAIZEN */}
+      <section className="bg-paper border-t border-border">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-24 grid grid-cols-12 gap-10 items-stretch">
+          <div className="col-span-12 md:col-span-5 relative flex">
+            <div className="relative w-full self-stretch overflow-hidden">
+              <ImageWithFallback
+                src={flagImg}
+                alt="American flag"
+                className="w-full h-full object-contain"
+              />
+            </div>
+          </div>
+
+          <div className="col-span-12 md:col-span-7 md:pl-4">
+            <div className="flex items-center gap-3 mb-6">
+              <span className="rule-red" />
+              <span className="eyebrow">Why Kaizen</span>
+            </div>
+            <h2 className="font-serif">
+              Beyond management —
+              <em className="italic text-navy"> toward mastery.</em>
+            </h2>
+            <p className="mt-6 text-ink/75 max-w-2xl">
+              We specialize in turning your vision or challenge into a tangible plan of action, and
+              leading it through every stage until completion. Working shoulder-to-shoulder with
+              your teams, we manage stakeholders, foster cross-functional cooperation, and apply
+              tailored processes and modern tools — so your objectives are met efficiently,
+              effectively, and with measurable results that exceed expectations.
+            </p>
+
+            <div className="mt-10 grid sm:grid-cols-2 gap-8">
+              <div>
+                <span className="eyebrow">Our Values</span>
+                <ul className="mt-4 space-y-3">
+                  {[
+                    "Continuous Improvement",
+                    "Client-Centric Approach",
+                    "Integrity & Transparency",
+                    "Collaborative Partnership",
+                  ].map((v) => (
+                    <li key={v} className="flex items-start gap-3 border-t border-border pt-3">
+                      <span className="mt-2 h-1.5 w-1.5 rounded-full bg-red shrink-0" />
+                      <span className="text-ink/85">{v}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <span className="eyebrow">Who We Serve</span>
+                <ul className="mt-4 space-y-3">
+                  {[
+                    "Federal Agencies",
+                    "Prime Contractors",
+                    "Federal Subcontractors",
+                    "Public Organizations",
+                  ].map((v) => (
+                    <li key={v} className="flex items-start gap-3 border-t border-border pt-3">
+                      <span className="mt-2 h-1.5 w-1.5 rounded-full bg-navy shrink-0" />
+                      <span className="text-ink/85">{v}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* CAPABILITIES (formerly What We Do) */}
+      <section className="bg-cream border-t border-border">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-24">
+          <div className="grid grid-cols-12 gap-6 mb-14">
+            <div className="col-span-12 md:col-span-7">
+              <div className="flex items-center gap-3">
+                <span className="rule-red" />
+                <span className="eyebrow" style={{ color: "var(--gold)" }}>
+                  Capabilities
+                </span>
+              </div>
+              <h2 className="font-serif mt-3">
+                A full spectrum of
+                <em className="italic text-navy"> project management expertise.</em>
+              </h2>
+            </div>
+            <div className="col-span-12 md:col-span-4 md:col-start-9 md:pt-6">
+              <p
+                className="text-ink/70"
+                style={{ lineHeight: 1.55 }}
+              >
+                Each practice is led by a senior partner. Tap any card to see the full service brief.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border border border-border">
+            {services.map((s) => (
+              <button
+                key={s.id}
+                onClick={() => setPage("services", { category: s.id })}
+                className="group relative text-center bg-paper p-6 md:p-8 transition-colors hover:bg-cream-2 focus:outline-none focus:bg-cream-2 flex flex-col items-center"
+              >
+                <h3 className="font-serif leading-tight">{s.title}</h3>
+                <div className="rule-red mt-4 self-center" />
+                <p className="mt-5 text-ink/75 leading-relaxed max-w-[280px]">
+                  {s.tagline}
+                </p>
+                <span className="mt-5 text-navy transition-transform duration-500 group-hover:translate-x-1 text-lg">
+                  →
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* OUR PROMISE */}
+      <section className="bg-navy text-paper">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-28">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="rule-red" />
+            <span className="eyebrow" style={{ color: "var(--gold)" }}>
+              Our Promise
+            </span>
+          </div>
+          <h2 className="font-serif text-paper">
+            We turn vision into a
+            <em className="italic" style={{ color: "var(--gold)", fontStyle: "normal" }}>
+              {" "}tangible plan of action
+            </em>{" "}
+            — leading every stage from discovery to continuous improvement, with the discipline
+            federal programs demand.
+          </h2>
+          <div className="mt-10">
+            <button
+              onClick={() => setPage("about")}
+              className="pill pill-ghost-dark pill-animated"
+            >
+              About Us →
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function StatsStrip() {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  const stats: [string, string][] = [
+    ["15+", "Years Experience"],
+    ["200+", "Projects Delivered"],
+    ["100%", "Compliance Rate"],
+  ];
+
+  return (
+    <section
+      ref={ref}
+      className="bg-cream border-y border-border"
+    >
+      <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-border">
+        {stats.map(([k, v], i) => (
+          <div key={k} className="px-8 py-14 text-center">
+            <div
+              className={`count-rise ${visible ? "is-visible" : ""}`}
+              style={{
+                color: "var(--navy)",
+                fontWeight: 300,
+                fontSize: "clamp(3rem, 6vw, 4.5rem)",
+                lineHeight: 1,
+                letterSpacing: "-0.02em",
+                transitionDelay: `${i * 120}ms`,
+              }}
+            >
+              {k}
+            </div>
+            <div
+              className={`count-rise mt-3 ${visible ? "is-visible" : ""}`}
+              style={{
+                color: "var(--navy)",
+                fontWeight: 300,
+                fontSize: "1rem",
+                transitionDelay: `${i * 120 + 100}ms`,
+              }}
+            >
+              {v}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
