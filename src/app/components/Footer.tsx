@@ -113,7 +113,21 @@ export function Footer({ setPage }: { setPage: (p: Page) => void }) {
           <p className="text-ink/55">
             © 2024 Kaizen Project Management and Consulting, LLC. All rights reserved.
           </p>
-          <p className="eyebrow text-ink/70">SAM.gov Registered</p>
+          <div className="flex items-center gap-5">
+            <button
+              onClick={() => setPage("privacy")}
+              className="text-ink/70 transition-colors hover:text-red"
+            >
+              Privacy
+            </button>
+            <button
+              onClick={() => setPage("terms")}
+              className="text-ink/70 transition-colors hover:text-red"
+            >
+              Terms
+            </button>
+            <span className="eyebrow text-ink/70">SAM.gov Registered</span>
+          </div>
         </div>
       </div>
     </footer>

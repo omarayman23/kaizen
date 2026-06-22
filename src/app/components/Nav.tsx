@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Mail, Phone } from "lucide-react";
 import logoPlain from "../../../kaiz.png";
 
-type Page = "home" | "about" | "services" | "contract" | "contact";
+type Page = "home" | "about" | "services" | "contract" | "contact" | "privacy" | "terms";
 
 const links: { id: Page; label: string; index: string }[] = [
   { id: "about", label: "About Us", index: "01" },

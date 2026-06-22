@@ -2,13 +2,14 @@ import { useCallback, useEffect, useState } from "react";
 import type { Page } from "./components/Nav";
 
 // Single source of truth: page -> clean URL path.
-// (Tasks add privacy/terms in Task 7; keep these five for now.)
 const PATHS: Record<Page, string> = {
   home: "/",
   about: "/about",
   services: "/capabilities",
   contract: "/our-work",
   contact: "/contact",
+  privacy: "/privacy",
+  terms: "/terms",
 };
 
 const PAGE_BY_PATH = Object.fromEntries(

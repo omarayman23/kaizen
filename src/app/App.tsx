@@ -8,6 +8,8 @@ import { About } from "./components/pages/About";
 import { Services } from "./components/pages/Services";
 import { ContractVehicles } from "./components/pages/ContractVehicles";
 import { Contact } from "./components/pages/Contact";
+import { Privacy } from "./components/pages/Privacy";
+import { Terms } from "./components/pages/Terms";
 import { useRoute } from "./useRoute";
 
 // This app's scroll container is the <body> (the html/body height:100% +
@@ -44,6 +46,10 @@ export default function App() {
         return <ContractVehicles />;
       case "contact":
         return <Contact />;
+      case "privacy":
+        return <Privacy />;
+      case "terms":
+        return <Terms />;
     }
   };
 
