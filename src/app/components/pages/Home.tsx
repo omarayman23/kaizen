@@ -46,7 +46,7 @@ export function Home({
           <div className="md:col-span-8 relative z-10">
             <div className="flex items-center gap-3 mb-8">
               <span className="rule-red" />
-              <span className="eyebrow">People · Process · Outcomes</span>
+              <span className="eyebrow">People · Process · Impact</span>
             </div>
             <h1
               className="font-serif"

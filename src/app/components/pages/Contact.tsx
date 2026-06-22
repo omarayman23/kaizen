@@ -25,7 +25,11 @@ export function Contact() {
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setForm((prev) => ({ ...prev, [key]: e.target.value }));
 
-  const selectType = (t: string) => setSelectedType(t);
+  const selectType = (t: string) => {
+    setSelectedType(t);
+    // "Other" needs detail, so reveal the note automatically.
+    if (t === "Other") setNoteOpen(true);
+  };
 
   const resetForm = () => {
     setForm({ name: "", email: "", company: "", message: "", website: "" });
@@ -195,7 +199,7 @@ export function Contact() {
                 </div>
 
                 <div>
-                  {!noteOpen ? (
+                  {!noteOpen && (
                     <button
                       type="button"
                       onClick={() => setNoteOpen(true)}
@@ -204,19 +208,30 @@ export function Contact() {
                     >
                       + Add a note
                     </button>
-                  ) : (
-                    <div className="fade-up">
-                      <label className="eyebrow block mb-3">Note</label>
+                  )}
+                  {/* Grid-rows trick gives a smooth open/close height transition */}
+                  <div className="note-collapse" data-open={noteOpen}>
+                    <div>
+                      <div className="flex items-center justify-between mb-3">
+                        <label className="eyebrow">Note</label>
+                        <button
+                          type="button"
+                          onClick={() => setNoteOpen(false)}
+                          style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+                          className="text-sm text-ink/55 hover:text-red transition-colors"
+                        >
+                          Close
+                        </button>
+                      </div>
                       <textarea
                         rows={5}
-                        autoFocus
                         value={form.message}
                         onChange={update("message")}
                         placeholder="Tell us about the project. A paragraph is plenty. Links welcome."
                         className="w-full bg-cream border border-border p-4 outline-none focus:border-navy transition-colors resize-none"
                       />
                     </div>
-                  )}
+                  </div>
                 </div>
 
                 {error && (

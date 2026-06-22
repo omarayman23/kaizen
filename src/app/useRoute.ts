@@ -10,6 +10,7 @@ const PATHS: Record<Page, string> = {
   contact: "/contact",
   privacy: "/privacy",
   terms: "/terms",
+  faq: "/faq",
 };
 
 const PAGE_BY_PATH = Object.fromEntries(

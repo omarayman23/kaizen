@@ -6,6 +6,7 @@ const navLinks: { id: Page; label: string }[] = [
   { id: "about", label: "About Us" },
   { id: "services", label: "Capabilities" },
   { id: "contract", label: "Our Work" },
+  { id: "faq", label: "FAQ" },
   { id: "contact", label: "Contact" },
 ];
 
@@ -29,8 +30,7 @@ export function Footer({ setPage }: { setPage: (p: Page) => void }) {
             />
           </button>
           <p className="mt-4 text-sm font-light leading-relaxed text-ink/60">
-            Kaizen Project Management & Consulting — continuous improvement woven into
-            every federal and commercial engagement.
+            Kaizen Project Management & Consulting
           </p>
         </div>
 
@@ -113,16 +113,16 @@ export function Footer({ setPage }: { setPage: (p: Page) => void }) {
           <p className="text-ink/55">
             © 2024 Kaizen Project Management and Consulting, LLC. All rights reserved.
           </p>
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-6">
             <button
               onClick={() => setPage("privacy")}
-              className="text-ink/70 transition-colors hover:text-red"
+              className="eyebrow text-ink/70 transition-colors hover:text-red"
             >
               Privacy
             </button>
             <button
               onClick={() => setPage("terms")}
-              className="text-ink/70 transition-colors hover:text-red"
+              className="eyebrow text-ink/70 transition-colors hover:text-red"
             >
               Terms
             </button>

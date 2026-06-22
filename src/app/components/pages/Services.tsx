@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Page } from "../Nav";
 import { services } from "../../services";
 
@@ -10,6 +10,8 @@ export function Services({
   setPage: (p: Page, opts?: { category?: string }) => void;
 }) {
   const refs = useRef<Record<string, HTMLDivElement | null>>({});
+  // Which box should briefly highlight after being targeted from 01/02/03.
+  const [flash, setFlash] = useState<string | null>(null);
 
   useEffect(() => {
     if (!activeCategory) return;
@@ -19,9 +21,17 @@ export function Services({
     // measure/scroll, otherwise the target moves out from under us.
     const id = window.setTimeout(() => {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
+      setFlash(activeCategory);
     }, 120);
     return () => window.clearTimeout(id);
   }, [activeCategory]);
+
+  // Clear the highlight once the pulse has played.
+  useEffect(() => {
+    if (!flash) return;
+    const id = window.setTimeout(() => setFlash(null), 1300);
+    return () => window.clearTimeout(id);
+  }, [flash]);
 
   return (
     <div className="fade-up">
@@ -82,7 +92,7 @@ export function Services({
                 i !== services.length - 1 ? "border-b border-border" : ""
               } ${
                 activeCategory === s.id ? "bg-cream-2/40 -mx-6 md:-mx-10 px-6 md:px-10 rounded-sm" : ""
-              }`}
+              } ${flash === s.id ? "box-flash" : ""}`}
             >
               <div className="md:col-span-4">
                 <div className="md:sticky md:top-[150px]">

@@ -10,7 +10,21 @@ import { ContractVehicles } from "./components/pages/ContractVehicles";
 import { Contact } from "./components/pages/Contact";
 import { Privacy } from "./components/pages/Privacy";
 import { Terms } from "./components/pages/Terms";
+import { FAQ } from "./components/pages/FAQ";
 import { useRoute } from "./useRoute";
+import type { Page } from "./components/Nav";
+
+// Browser-tab title per page (home keeps the brand; others are just the page).
+const TITLES: Record<Page, string> = {
+  home: "Kaizen - Home",
+  about: "About Us",
+  services: "Capabilities",
+  contract: "Our Work",
+  contact: "Contact",
+  faq: "FAQ",
+  privacy: "Privacy",
+  terms: "Terms",
+};
 
 // This app's scroll container is the <body> (the html/body height:100% +
 // overflow setup makes the body itself scroll, not the window), so a plain
@@ -34,6 +48,11 @@ export default function App() {
     scrollToTop();
   }, []);
 
+  // Keep the browser-tab title in sync with the current page.
+  useEffect(() => {
+    document.title = TITLES[page];
+  }, [page]);
+
   const renderPage = () => {
     switch (page) {
       case "home":
@@ -50,6 +69,8 @@ export default function App() {
         return <Privacy />;
       case "terms":
         return <Terms />;
+      case "faq":
+        return <FAQ />;
     }
   };
 
@@ -70,7 +91,7 @@ export default function App() {
           }}
         >
           <motion.main
-            key={`${page}:${category ?? ""}`}
+            key={page}
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
