@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Mail, Phone } from "lucide-react";
 import logoPlain from "../../../kaiz.png";
 
-type Page = "home" | "about" | "services" | "contract" | "contact";
+type Page = "home" | "about" | "services" | "contract" | "contact" | "privacy" | "terms" | "faq";
 
 const links: { id: Page; label: string; index: string }[] = [
   { id: "about", label: "About Us", index: "01" },
@@ -37,6 +37,11 @@ export function Nav({
             onClick={() => {
               setPage("home");
               setOpen(false);
+              // Land at the very top even when already on the home page
+              // (navigating to a page you're already on won't re-scroll).
+              window.scrollTo(0, 0);
+              document.documentElement.scrollTop = 0;
+              document.body.scrollTop = 0;
             }}
             className="flex items-center"
           >

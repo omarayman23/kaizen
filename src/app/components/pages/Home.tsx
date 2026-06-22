@@ -46,7 +46,7 @@ export function Home({
           <div className="md:col-span-8 relative z-10">
             <div className="flex items-center gap-3 mb-8">
               <span className="rule-red" />
-              <span className="eyebrow">People · Process · Outcomes</span>
+              <span className="eyebrow">People · Process · Impact</span>
             </div>
             <h1
               className="font-serif"
@@ -269,19 +269,22 @@ function StatsStrip() {
         {stats.map((s, i) => (
           <div
             key={s.label}
-            className={`count-rise px-6 py-6 text-center ${visible ? "is-visible" : ""}`}
+            className={`count-rise px-6 py-10 text-center ${visible ? "is-visible" : ""}`}
             style={{ transitionDelay: `${i * 120}ms` }}
           >
             <span
-              className="font-serif font-semibold text-navy tabular-nums"
-              style={{ fontSize: "var(--text-body)" }}
+              className="block font-serif text-navy tabular-nums"
+              style={{
+                fontSize: "clamp(2.25rem, 5vw, 3.25rem)",
+                fontWeight: 300,
+                letterSpacing: "-0.03em",
+                lineHeight: 1,
+              }}
             >
-              <CountUp target={s.value} run={visible} />
-              {s.suffix}
-            </span>{" "}
-            <span className="text-muted-ink" style={{ fontSize: "var(--text-body)" }}>
-              {s.label}
+              <CountUp target={s.value} run={visible} duration={2600} />
+              <span style={{ color: "var(--gold)" }}>{s.suffix}</span>
             </span>
+            <span className="mt-3 block eyebrow text-muted-ink">{s.label}</span>
           </div>
         ))}
       </div>

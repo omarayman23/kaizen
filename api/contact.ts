@@ -38,7 +38,7 @@ type Submission = {
   name: string;
   email: string;
   company: string;
-  projectTypes: string[];
+  projectType: string;
   message: string;
 };
 
@@ -135,7 +135,7 @@ function confirmationEmail(s: Submission): { subject: string; html: string } {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 24px;background:${CREAM};border:1px solid ${LINE};">
       <tr><td style="padding:18px 22px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-          ${detailRow("Project type", escapeHtml(s.projectTypes.join(", ") || "—"))}
+          ${detailRow("Project type", escapeHtml(s.projectType || "—"))}
           <tr>
             <td colspan="2" style="padding:12px 0 2px;font-family:${FONT_STACK};">
               <span style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:${MUTED};">Your message</span>
@@ -186,7 +186,7 @@ function notificationEmail(s: Submission): { subject: string; html: string } {
         )}</a>`
       )}
       ${detailRow("Company / Agency", escapeHtml(s.company || "—"))}
-      ${detailRow("Project type", escapeHtml(s.projectTypes.join(", ") || "—"))}
+      ${detailRow("Project type", escapeHtml(s.projectType || "—"))}
       <tr>
         <td colspan="2" style="padding:14px 0 2px;font-family:${FONT_STACK};">
           <span style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:${MUTED};">Message</span>
@@ -232,14 +232,15 @@ export default async function handler(req: any, res: any) {
   const email = String(body.email || "").trim();
   const company = String(body.company || "").trim();
   const message = String(body.message || "").trim();
-  const projectTypes = Array.isArray(body.projectTypes)
-    ? body.projectTypes.map((t: unknown) => String(t)).filter(Boolean)
-    : [];
+  const projectType = String(
+    body.projectType ||
+      (Array.isArray(body.projectTypes) ? body.projectTypes.join(", ") : "")
+  ).trim();
 
-  if (!name || !email || !message) {
+  if (!name || !email) {
     return res
       .status(400)
-      .json({ error: "Please add your name, email, and a short message." });
+      .json({ error: "Please add your name and email." });
   }
   if (!EMAIL_RE.test(email)) {
     return res.status(400).json({ error: "That email address looks off — mind checking it?" });
@@ -256,7 +257,7 @@ export default async function handler(req: any, res: any) {
       .json({ error: "The mail service isn't configured yet. Please email us directly for now." });
   }
 
-  const submission: Submission = { name, email, company, projectTypes, message };
+  const submission: Submission = { name, email, company, projectType, message };
   const notification = notificationEmail(submission);
   const confirmation = confirmationEmail(submission);
 

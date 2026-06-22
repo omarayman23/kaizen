@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
-import { Nav, type Page } from "./components/Nav";
+import { Nav } from "./components/Nav";
 import { Footer } from "./components/Footer";
 import { QuickReach } from "./components/QuickReach";
 import { Home } from "./components/pages/Home";
@@ -8,6 +8,23 @@ import { About } from "./components/pages/About";
 import { Services } from "./components/pages/Services";
 import { ContractVehicles } from "./components/pages/ContractVehicles";
 import { Contact } from "./components/pages/Contact";
+import { Privacy } from "./components/pages/Privacy";
+import { Terms } from "./components/pages/Terms";
+import { FAQ } from "./components/pages/FAQ";
+import { useRoute } from "./useRoute";
+import type { Page } from "./components/Nav";
+
+// Browser-tab title per page (home keeps the brand; others are just the page).
+const TITLES: Record<Page, string> = {
+  home: "Kaizen - Home",
+  about: "About Us",
+  services: "Capabilities",
+  contract: "Our Work",
+  contact: "Contact",
+  faq: "FAQ",
+  privacy: "Privacy",
+  terms: "Terms",
+};
 
 // This app's scroll container is the <body> (the html/body height:100% +
 // overflow setup makes the body itself scroll, not the window), so a plain
@@ -19,14 +36,8 @@ function scrollToTop() {
 }
 
 export default function App() {
-  const [page, setPage] = useState<Page>("home");
-  const [category, setCategory] = useState<string | undefined>(undefined);
+  const { page, category, navigate } = useRoute();
   const [menuOpen, setMenuOpen] = useState(false);
-
-  const navigate = (p: Page, opts?: { category?: string }) => {
-    setCategory(opts?.category);
-    setPage(p);
-  };
 
   // On first load / refresh, don't restore the previous scroll position —
   // always begin at the top.
@@ -36,6 +47,11 @@ export default function App() {
     }
     scrollToTop();
   }, []);
+
+  // Keep the browser-tab title in sync with the current page.
+  useEffect(() => {
+    document.title = TITLES[page];
+  }, [page]);
 
   const renderPage = () => {
     switch (page) {
@@ -49,6 +65,12 @@ export default function App() {
         return <ContractVehicles />;
       case "contact":
         return <Contact />;
+      case "privacy":
+        return <Privacy />;
+      case "terms":
+        return <Terms />;
+      case "faq":
+        return <FAQ />;
     }
   };
 
@@ -58,12 +80,18 @@ export default function App() {
         <Nav page={page} setPage={navigate} open={menuOpen} setOpen={setMenuOpen} />
 
         {/* mode="wait": the current page fully fades out, THEN we snap to the
-            top (onExitComplete), THEN the next page fades up from there — so
-            every navigation lands at the top of the new page. Keying on page +
-            category means switching service categories transitions too. */}
-        <AnimatePresence mode="wait" onExitComplete={scrollToTop}>
+            top (onExitComplete), THEN the next page fades up from there. */}
+        <AnimatePresence
+          mode="wait"
+          onExitComplete={() => {
+            // When deep-linking to a capability, Services scrolls to the box
+            // itself — don't clobber it by snapping to the top.
+            if (page === "services" && category) return;
+            scrollToTop();
+          }}
+        >
           <motion.main
-            key={`${page}:${category ?? ""}`}
+            key={page}
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}

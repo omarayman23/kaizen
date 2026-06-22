@@ -10,7 +10,8 @@ export function Contact() {
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([projectTypes[0]]);
+  const [selectedType, setSelectedType] = useState<string>(projectTypes[0]);
+  const [noteOpen, setNoteOpen] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -24,14 +25,28 @@ export function Contact() {
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setForm((prev) => ({ ...prev, [key]: e.target.value }));
 
-  const toggleType = (t: string) =>
-    setSelectedTypes((prev) =>
-      prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]
-    );
+  const selectType = (t: string) =>
+    setSelectedType((prev) => {
+      if (prev === t) {
+        // Tapping the active one deselects it; if it's "Other", close the note too.
+        if (t === "Other") setNoteOpen(false);
+        return "";
+      }
+      // "Other" needs detail, so reveal the note automatically.
+      if (t === "Other") setNoteOpen(true);
+      return t;
+    });
+
+  const closeNote = () => {
+    setNoteOpen(false);
+    // Choosing "Other" implies a note, so closing it deselects "Other".
+    setSelectedType((prev) => (prev === "Other" ? "" : prev));
+  };
 
   const resetForm = () => {
     setForm({ name: "", email: "", company: "", message: "", website: "" });
-    setSelectedTypes([projectTypes[0]]);
+    setSelectedType(projectTypes[0]);
+    setNoteOpen(false);
     setError(null);
   };
 
@@ -43,7 +58,7 @@ export function Contact() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, projectTypes: selectedTypes }),
+        body: JSON.stringify({ ...form, projectType: selectedType }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -175,14 +190,17 @@ export function Contact() {
 
                 <div>
                   <label className="eyebrow block mb-3">Project type</label>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Project type">
                     {projectTypes.map((t) => {
-                      const active = selectedTypes.includes(t);
+                      const active = selectedType === t;
                       return (
                         <button
                           type="button"
+                          role="radio"
+                          aria-checked={active}
                           key={t}
-                          onClick={() => toggleType(t)}
+                          onClick={() => selectType(t)}
+                          style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
                           className={`pill ${active ? "pill-primary" : "pill-ghost"} !py-2 !px-4 text-sm`}
                         >
                           {t}
@@ -193,15 +211,39 @@ export function Contact() {
                 </div>
 
                 <div>
-                  <label className="eyebrow block mb-3">Tell us about the project</label>
-                  <textarea
-                    rows={5}
-                    required
-                    value={form.message}
-                    onChange={update("message")}
-                    placeholder="A paragraph is plenty. Links welcome."
-                    className="w-full bg-cream border border-border p-4 outline-none focus:border-navy transition-colors resize-none"
-                  />
+                  {!noteOpen && (
+                    <button
+                      type="button"
+                      onClick={() => setNoteOpen(true)}
+                      style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+                      className="pill pill-ghost !py-2 !px-4 text-sm"
+                    >
+                      + Add a note
+                    </button>
+                  )}
+                  {/* Grid-rows trick gives a smooth open/close height transition */}
+                  <div className="note-collapse" data-open={noteOpen}>
+                    <div>
+                      <div className="flex items-center justify-between mb-3">
+                        <label className="eyebrow">Note</label>
+                        <button
+                          type="button"
+                          onClick={closeNote}
+                          style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+                          className="text-sm text-ink/55 hover:text-red transition-colors"
+                        >
+                          Close
+                        </button>
+                      </div>
+                      <textarea
+                        rows={5}
+                        value={form.message}
+                        onChange={update("message")}
+                        placeholder="Tell us about the project. A paragraph is plenty. Links welcome."
+                        className="w-full bg-cream border border-border p-4 outline-none focus:border-navy transition-colors resize-none"
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 {error && (
