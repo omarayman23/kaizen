@@ -6,8 +6,8 @@ const navLinks: { id: Page; label: string }[] = [
   { id: "about", label: "About Us" },
   { id: "services", label: "Capabilities" },
   { id: "contract", label: "Our Work" },
-  { id: "faq", label: "FAQ" },
   { id: "contact", label: "Contact" },
+  { id: "faq", label: "FAQ" },
 ];
 
 export function Footer({ setPage }: { setPage: (p: Page) => void }) {

@@ -25,10 +25,22 @@ export function Contact() {
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setForm((prev) => ({ ...prev, [key]: e.target.value }));
 
-  const selectType = (t: string) => {
-    setSelectedType(t);
-    // "Other" needs detail, so reveal the note automatically.
-    if (t === "Other") setNoteOpen(true);
+  const selectType = (t: string) =>
+    setSelectedType((prev) => {
+      if (prev === t) {
+        // Tapping the active one deselects it; if it's "Other", close the note too.
+        if (t === "Other") setNoteOpen(false);
+        return "";
+      }
+      // "Other" needs detail, so reveal the note automatically.
+      if (t === "Other") setNoteOpen(true);
+      return t;
+    });
+
+  const closeNote = () => {
+    setNoteOpen(false);
+    // Choosing "Other" implies a note, so closing it deselects "Other".
+    setSelectedType((prev) => (prev === "Other" ? "" : prev));
   };
 
   const resetForm = () => {
@@ -216,7 +228,7 @@ export function Contact() {
                         <label className="eyebrow">Note</label>
                         <button
                           type="button"
-                          onClick={() => setNoteOpen(false)}
+                          onClick={closeNote}
                           style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
                           className="text-sm text-ink/55 hover:text-red transition-colors"
                         >

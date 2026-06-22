@@ -334,14 +334,17 @@
   }
   .count-rise.is-visible { opacity: 1; transform: translateY(0); }
 
-  /* Smoothly expand/collapse the contact note via grid-template-rows */
-  .note-collapse {
+  /* Smoothly expand/collapse via grid-template-rows (contact note + FAQ) */
+  .note-collapse,
+  .faq-collapse {
     display: grid;
     grid-template-rows: 0fr;
     transition: grid-template-rows .35s ease;
   }
-  .note-collapse[data-open="true"] { grid-template-rows: 1fr; }
-  .note-collapse > div { overflow: hidden; }
+  .note-collapse[data-open="true"],
+  .faq-collapse[data-open="true"] { grid-template-rows: 1fr; }
+  .note-collapse > div,
+  .faq-collapse > div { overflow: hidden; }
 
   /* Brief highlight pulse when a capability box is targeted from 01/02/03 */
   @keyframes boxFlash {

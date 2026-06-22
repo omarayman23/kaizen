@@ -37,6 +37,11 @@ export function Nav({
             onClick={() => {
               setPage("home");
               setOpen(false);
+              // Land at the very top even when already on the home page
+              // (navigating to a page you're already on won't re-scroll).
+              window.scrollTo(0, 0);
+              document.documentElement.scrollTop = 0;
+              document.body.scrollTop = 0;
             }}
             className="flex items-center"
           >

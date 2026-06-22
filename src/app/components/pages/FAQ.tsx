@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const faqs: { q: string; a: string }[] = [
   {
     q: "What services does Kaizen provide?",
@@ -22,6 +24,9 @@ const faqs: { q: string; a: string }[] = [
 ];
 
 export function FAQ() {
+  // Single-open accordion: opening one closes the previously open one.
+  const [open, setOpen] = useState<number | null>(null);
+
   return (
     <div className="fade-up">
       <section className="bg-paper">
@@ -39,22 +44,40 @@ export function FAQ() {
 
       <section className="bg-cream border-t border-border">
         <div className="max-w-[860px] mx-auto px-6 md:px-10 py-16 space-y-4">
-          {faqs.map((f) => (
-            <details
-              key={f.q}
-              className="group border border-border bg-paper p-6 transition-colors open:bg-cream-2/40"
-            >
-              <summary className="flex cursor-pointer items-center justify-between gap-4 list-none">
-                <h2 className="font-serif text-navy text-[1.15rem] md:text-[1.35rem] leading-snug">
-                  {f.q}
-                </h2>
-                <span className="shrink-0 text-navy text-2xl leading-none transition-transform duration-300 group-open:rotate-45">
-                  +
-                </span>
-              </summary>
-              <p className="mt-4 text-ink/80 leading-relaxed">{f.a}</p>
-            </details>
-          ))}
+          {faqs.map((f, i) => {
+            const isOpen = open === i;
+            return (
+              <div
+                key={f.q}
+                className={`border border-border transition-colors ${
+                  isOpen ? "bg-cream-2/40" : "bg-paper"
+                }`}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpen(isOpen ? null : i)}
+                  aria-expanded={isOpen}
+                  className="flex w-full cursor-pointer items-center justify-between gap-4 p-6 text-left"
+                >
+                  <h2 className="font-serif text-navy text-[1.15rem] md:text-[1.35rem] leading-snug">
+                    {f.q}
+                  </h2>
+                  <span
+                    className={`shrink-0 text-navy text-2xl leading-none transition-transform duration-300 ${
+                      isOpen ? "rotate-45" : ""
+                    }`}
+                  >
+                    +
+                  </span>
+                </button>
+                <div className="faq-collapse" data-open={isOpen}>
+                  <div>
+                    <p className="px-6 pb-6 text-ink/80 leading-relaxed">{f.a}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
     </div>

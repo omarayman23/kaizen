@@ -3,29 +3,24 @@ import type { CSSProperties } from "react";
 /**
  * Partners we've worked with.
  *
- * ── HOW TO ADD A COMPANY ──────────────────────────────────────────────
- * Each entry is one tile in the rotating row. Two options:
- *
- *   1. Logo image — drop the file in the project and import it, then:
- *        { name: "Acme Corp", logo: acmeLogo }
- *      (the `name` is still used for the alt text / accessibility)
- *
- *   2. Text wordmark (no logo yet) — just the name:
- *        { name: "Acme Corp" }
- *
- * The row loops seamlessly no matter how many you add.
- * ──────────────────────────────────────────────────────────────────────
+ * Every image dropped into the /Logos folder at the project root is picked up
+ * automatically — no need to edit this file to add a partner. The filename is
+ * used only as alt text (it is never shown).
  */
 type Partner = { name: string; logo?: string };
 
-const partners: Partner[] = [
-  { name: "Partner One" },
-  { name: "Partner Two" },
-  { name: "Partner Three" },
-  { name: "Partner Four" },
-  { name: "Partner Five" },
-  { name: "Partner Six" },
-];
+// Eagerly import every logo image in /Logos (capital L — case matters on Linux/Vercel).
+const logoModules = import.meta.glob(
+  "../../../../Logos/*.{png,jpg,jpeg,svg,webp,PNG,JPG,JPEG,SVG,WEBP}",
+  { eager: true, import: "default" }
+) as Record<string, string>;
+
+const partners: Partner[] = Object.entries(logoModules)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([path, src]) => ({
+    name: path.split("/").pop()!.replace(/\.[^.]+$/, ""),
+    logo: src,
+  }));
 
 // Soft fade on the left/right edges so logos dissolve in and out.
 const fadeWidth = 96;
@@ -41,7 +36,11 @@ function PartnerTile({ partner }: { partner: Partner }) {
         <img
           src={partner.logo}
           alt={partner.name}
-          className="h-10 w-auto object-contain opacity-60 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0"
+          loading="lazy"
+          // mix-blend-multiply drops the white box behind JPG logos so they
+          // sit transparently on the paper background.
+          style={{ mixBlendMode: "multiply" }}
+          className="h-12 w-auto object-contain opacity-80 transition-opacity duration-300 hover:opacity-100"
         />
       ) : (
         <span className="whitespace-nowrap font-serif text-xl font-semibold tracking-tight text-navy/45 transition-colors duration-300 hover:text-navy">

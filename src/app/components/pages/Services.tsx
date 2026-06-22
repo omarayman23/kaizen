@@ -88,10 +88,8 @@ export function Services({
             <div
               key={s.id}
               ref={(el) => (refs.current[s.id] = el)}
-              className={`grid grid-cols-1 md:grid-cols-12 gap-6 py-16 scroll-mt-[150px] md:scroll-mt-[210px] transition-colors ${
+              className={`grid grid-cols-1 md:grid-cols-12 gap-6 py-16 scroll-mt-[150px] md:scroll-mt-[210px] ${
                 i !== services.length - 1 ? "border-b border-border" : ""
-              } ${
-                activeCategory === s.id ? "bg-cream-2/40 -mx-6 md:-mx-10 px-6 md:px-10 rounded-sm" : ""
               } ${flash === s.id ? "box-flash" : ""}`}
             >
               <div className="md:col-span-4">
