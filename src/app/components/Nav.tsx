@@ -4,6 +4,40 @@ import logoPlain from "../../../kaiz.png";
 
 type Page = "home" | "about" | "services" | "contract" | "contact" | "privacy" | "terms" | "faq";
 
+/**
+ * Smoothly scrolls the page back to the top.
+ *
+ * `overflow-x: hidden` on <html> propagates the viewport scroll to <body>, so
+ * <html> is parked at viewport height and native `scroll-behavior: smooth`
+ * never animates the real scroller. We drive the animation ourselves with
+ * requestAnimationFrame and assign scrollTop directly each frame (the one
+ * operation that reliably moves the propagated <body> scroller), writing to
+ * both <body> and <html> so it also works on pages where <html> is the scroller.
+ */
+function smoothScrollToTop(duration = 500) {
+  const startY =
+    document.body.scrollTop || document.documentElement.scrollTop || window.scrollY;
+  if (startY === 0) return;
+
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    return;
+  }
+
+  const start = performance.now();
+  const step = (now: number) => {
+    const t = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+    const y = Math.round(startY * (1 - eased));
+    document.body.scrollTop = y;
+    document.documentElement.scrollTop = y;
+    if (t < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
 const links: { id: Page; label: string; index: string }[] = [
   { id: "about", label: "About Us", index: "01" },
   { id: "services", label: "Capabilities", index: "02" },
@@ -35,10 +69,14 @@ export function Nav({
         <div className="max-w-[1400px] mx-auto px-4 md:px-10 h-[72px] md:h-[120px] flex items-center justify-between">
           <button
             onClick={() => {
+              if (page === "home") {
+                // Already home — smooth-scroll back to the top without
+                // animating the logo itself.
+                smoothScrollToTop();
+                return;
+              }
               setPage("home");
               setOpen(false);
-              // Land at the very top even when already on the home page
-              // (navigating to a page you're already on won't re-scroll).
               window.scrollTo(0, 0);
               document.documentElement.scrollTop = 0;
               document.body.scrollTop = 0;

@@ -2,7 +2,7 @@ const EFFECTIVE_DATE = "June 21, 2026";
 
 export function Terms() {
   return (
-    <div className="fade-up">
+    <div>
       <section className="bg-paper">
         <div className="max-w-[860px] mx-auto px-6 md:px-10 pt-20 pb-12">
           <div className="flex items-center gap-3 mb-6">

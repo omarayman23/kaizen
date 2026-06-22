@@ -29,8 +29,8 @@ export function Footer({ setPage }: { setPage: (p: Page) => void }) {
               className="h-24 md:h-32 w-auto object-contain"
             />
           </button>
-          <p className="mt-4 text-sm font-light leading-relaxed text-ink/60">
-            Kaizen Project Management & Consulting
+          <p className="mt-4 font-light leading-relaxed text-ink/85">
+            Kaizen Project Management & Consulting, LLC
           </p>
         </div>
 
@@ -110,9 +110,9 @@ export function Footer({ setPage }: { setPage: (p: Page) => void }) {
 
       <div className="border-t border-border">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-center">
-          <p className="text-ink/55">
+          <span className="eyebrow text-ink/70">
             © 2024 Kaizen Project Management and Consulting, LLC. All rights reserved.
-          </p>
+          </span>
           <div className="flex items-center gap-6">
             <button
               onClick={() => setPage("privacy")}

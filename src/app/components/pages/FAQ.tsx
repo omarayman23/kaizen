@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { setJsonLd } from "../../useSeo";
 
 const faqs: { q: string; a: string }[] = [
   {
@@ -26,6 +27,21 @@ const faqs: { q: string; a: string }[] = [
 export function FAQ() {
   // Single-open accordion: opening one closes the previously open one.
   const [open, setOpen] = useState<number | null>(null);
+
+  // Publish FAQ rich-result structured data that mirrors the visible Q&As,
+  // and remove it when navigating away so it only describes this page.
+  useEffect(() => {
+    setJsonLd("ld-faq", {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    });
+    return () => document.getElementById("ld-faq")?.remove();
+  }, []);
 
   return (
     <div className="fade-up">
