@@ -12,11 +12,15 @@ export function Services({
   const refs = useRef<Record<string, HTMLDivElement | null>>({});
 
   useEffect(() => {
-    if (activeCategory && refs.current[activeCategory]) {
-      const el = refs.current[activeCategory]!;
-      const top = el.getBoundingClientRect().top + window.scrollY - 150;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
+    if (!activeCategory) return;
+    const el = refs.current[activeCategory];
+    if (!el) return;
+    // Defer so the page-enter transition and layout have settled before we
+    // measure/scroll, otherwise the target moves out from under us.
+    const id = window.setTimeout(() => {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 120);
+    return () => window.clearTimeout(id);
   }, [activeCategory]);
 
   return (
@@ -74,7 +78,7 @@ export function Services({
             <div
               key={s.id}
               ref={(el) => (refs.current[s.id] = el)}
-              className={`grid grid-cols-1 md:grid-cols-12 gap-6 py-16 scroll-mt-32 transition-colors ${
+              className={`grid grid-cols-1 md:grid-cols-12 gap-6 py-16 scroll-mt-[150px] md:scroll-mt-[210px] transition-colors ${
                 i !== services.length - 1 ? "border-b border-border" : ""
               } ${
                 activeCategory === s.id ? "bg-cream-2/40 -mx-6 md:-mx-10 px-6 md:px-10 rounded-sm" : ""

@@ -54,7 +54,15 @@ export default function App() {
 
         {/* mode="wait": the current page fully fades out, THEN we snap to the
             top (onExitComplete), THEN the next page fades up from there. */}
-        <AnimatePresence mode="wait" onExitComplete={scrollToTop}>
+        <AnimatePresence
+          mode="wait"
+          onExitComplete={() => {
+            // When deep-linking to a capability, Services scrolls to the box
+            // itself — don't clobber it by snapping to the top.
+            if (page === "services" && category) return;
+            scrollToTop();
+          }}
+        >
           <motion.main
             key={`${page}:${category ?? ""}`}
             initial={{ opacity: 0, y: 24 }}
