@@ -237,10 +237,10 @@ export default async function handler(req: any, res: any) {
       (Array.isArray(body.projectTypes) ? body.projectTypes.join(", ") : "")
   ).trim();
 
-  if (!name || !email || !message) {
+  if (!name || !email) {
     return res
       .status(400)
-      .json({ error: "Please add your name, email, and a short message." });
+      .json({ error: "Please add your name and email." });
   }
   if (!EMAIL_RE.test(email)) {
     return res.status(400).json({ error: "That email address looks off — mind checking it?" });

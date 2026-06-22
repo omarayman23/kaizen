@@ -11,6 +11,7 @@ export function Contact() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedType, setSelectedType] = useState<string>(projectTypes[0]);
+  const [noteOpen, setNoteOpen] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -29,6 +30,7 @@ export function Contact() {
   const resetForm = () => {
     setForm({ name: "", email: "", company: "", message: "", website: "" });
     setSelectedType(projectTypes[0]);
+    setNoteOpen(false);
     setError(null);
   };
 
@@ -193,15 +195,28 @@ export function Contact() {
                 </div>
 
                 <div>
-                  <label className="eyebrow block mb-3">Tell us about the project</label>
-                  <textarea
-                    rows={5}
-                    required
-                    value={form.message}
-                    onChange={update("message")}
-                    placeholder="A paragraph is plenty. Links welcome."
-                    className="w-full bg-cream border border-border p-4 outline-none focus:border-navy transition-colors resize-none"
-                  />
+                  {!noteOpen ? (
+                    <button
+                      type="button"
+                      onClick={() => setNoteOpen(true)}
+                      style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+                      className="pill pill-ghost !py-2 !px-4 text-sm"
+                    >
+                      + Add a note
+                    </button>
+                  ) : (
+                    <div className="fade-up">
+                      <label className="eyebrow block mb-3">Note</label>
+                      <textarea
+                        rows={5}
+                        autoFocus
+                        value={form.message}
+                        onChange={update("message")}
+                        placeholder="Tell us about the project. A paragraph is plenty. Links welcome."
+                        className="w-full bg-cream border border-border p-4 outline-none focus:border-navy transition-colors resize-none"
+                      />
+                    </div>
+                  )}
                 </div>
 
                 {error && (
