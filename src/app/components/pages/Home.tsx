@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { ImageWithFallback } from "../figma/ImageWithFallback";
+import { MediaFrame } from "../MediaFrame";
 import type { Page } from "../Nav";
 import { services } from "../../services";
 import flagImg from "../../../../flag.jpg";
-import heroImg from "../../../../1main.jpg";
+import heroImg from "../../../../Kaizen-Hero-Wallpaper.jpg";
 
 export function Home({
   setPage,
@@ -13,31 +14,32 @@ export function Home({
   return (
     <div className="fade-up">
       {/* HERO */}
-      <section className="relative bg-paper overflow-hidden">
+      <section className="relative bg-navy overflow-hidden">
         <div className="absolute inset-0">
           <ImageWithFallback
             src={heroImg}
             alt=""
-            className="w-full h-full object-cover"
+            className="hero-img w-full h-full object-cover"
             loading="eager"
             // @ts-expect-error fetchpriority is a valid HTML attribute not yet in the React types here
             fetchpriority="high"
           />
-          {/* Desktop: horizontal wash (text sits in the left columns) */}
+          {/* Desktop: navy scrim deepening the left columns where the text
+              sits, fading out so the crystal stays visible on the right. */}
           <div
             className="absolute inset-0 pointer-events-none hidden md:block"
             style={{
               background:
-                "linear-gradient(to right, var(--paper) 0%, var(--paper) 25%, rgba(255,255,255,0.85) 45%, rgba(255,255,255,0.2) 70%, rgba(255,255,255,0) 100%)",
+                "linear-gradient(to right, rgba(19,31,56,0.92) 0%, rgba(19,31,56,0.85) 32%, rgba(19,31,56,0.5) 52%, rgba(19,31,56,0.1) 72%, rgba(19,31,56,0) 100%)",
             }}
           />
-          {/* Mobile: bottom-up wash so the full-width hero text stays legible
-              over the image */}
+          {/* Mobile: bottom-up navy scrim so the full-width hero text stays
+              legible over the image. */}
           <div
             className="absolute inset-0 pointer-events-none md:hidden"
             style={{
               background:
-                "linear-gradient(to top, var(--paper) 0%, rgba(255,255,255,0.92) 38%, rgba(255,255,255,0.6) 62%, rgba(255,255,255,0.15) 100%)",
+                "linear-gradient(to top, rgba(19,31,56,0.95) 0%, rgba(19,31,56,0.85) 38%, rgba(19,31,56,0.45) 64%, rgba(19,31,56,0.1) 100%)",
             }}
           />
         </div>
@@ -46,10 +48,12 @@ export function Home({
           <div className="md:col-span-8 relative z-10">
             <div className="flex items-center gap-3 mb-8">
               <span className="rule-red" />
-              <span className="eyebrow">People · Process · Impact</span>
+              <span className="eyebrow" style={{ color: "rgba(255,255,255,0.72)" }}>
+                People · Process · Impact
+              </span>
             </div>
             <h1
-              className="font-serif"
+              className="font-serif text-paper"
               style={{
                 fontSize: "clamp(1.5rem, 4.2vw, 3.75rem)",
                 lineHeight: 1.1,
@@ -64,8 +68,11 @@ export function Home({
               </em>
             </h1>
             <p
-              className="mt-8 max-w-xl text-ink/80"
-              style={{ lineHeight: 1.55 }}
+              className="mt-8 max-w-xl text-paper/85"
+              style={{
+                fontSize: "clamp(1.1rem, 1rem + 0.5vw, 1.35rem)",
+                lineHeight: 1.55,
+              }}
             >
               Continuous improvement woven into every engagement, every milestone, every
               deliverable.
@@ -80,7 +87,7 @@ export function Home({
               </button>
               <button
                 onClick={() => setPage("contract")}
-                className="pill pill-ghost pill-animated"
+                className="pill pill-ghost-dark pill-animated"
               >
                 Our Work
               </button>
@@ -95,13 +102,13 @@ export function Home({
       <section className="bg-paper border-t border-border">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-24 grid grid-cols-1 md:grid-cols-12 gap-10 items-stretch">
           <div className="md:col-span-5 relative flex">
-            <div className="relative w-full self-stretch overflow-hidden">
+            <MediaFrame className="w-full self-stretch">
               <ImageWithFallback
                 src={flagImg}
                 alt="American flag"
                 className="w-full h-full object-contain"
               />
-            </div>
+            </MediaFrame>
           </div>
 
           <div className="md:col-span-7 md:pl-4">

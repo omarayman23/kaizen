@@ -1,4 +1,7 @@
+import { useState } from "react";
 import { LogoCloud } from "../ui/logo-cloud";
+
+const PREVIEW_COUNT = 5;
 
 const naics: { code: string; title: string }[] = [
   { code: "541330", title: "Engineering Services" },
@@ -15,6 +18,9 @@ const naics: { code: string; title: string }[] = [
 ];
 
 export function ContractVehicles() {
+  const [expanded, setExpanded] = useState(false);
+  const visible = expanded ? naics : naics.slice(0, PREVIEW_COUNT);
+
   return (
     <div className="fade-up">
       {/* HEADER */}
@@ -70,10 +76,12 @@ export function ContractVehicles() {
                 </tr>
               </thead>
               <tbody>
-                {naics.map((row) => (
+                {visible.map((row, i) => (
                   <tr
                     key={row.code}
-                    className="border-b border-border group transition-colors hover:bg-paper"
+                    className={`border-b border-border group transition-colors hover:bg-paper ${
+                      expanded && i >= PREVIEW_COUNT ? "animate-fade-in" : ""
+                    }`}
                   >
                     <td className="py-5 pr-6 align-top">
                       <span className="font-serif text-navy tracking-wide tabular-nums text-[1.15rem]">
@@ -90,6 +98,23 @@ export function ContractVehicles() {
                 ))}
               </tbody>
             </table>
+
+            <div className="mt-8 flex items-center gap-4">
+              <button
+                type="button"
+                onClick={() => setExpanded((v) => !v)}
+                aria-expanded={expanded}
+                className="pill pill-ghost pill-animated"
+              >
+                {expanded ? "Show fewer" : `View all ${naics.length} codes`}
+                <span aria-hidden="true">{expanded ? " ↑" : " ↓"}</span>
+              </button>
+              {!expanded && (
+                <span className="eyebrow text-muted-ink">
+                  Showing {PREVIEW_COUNT} of {naics.length}
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </section>

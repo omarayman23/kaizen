@@ -1,6 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { ImageWithFallback } from "../figma/ImageWithFallback";
+import { MediaFrame } from "../MediaFrame";
 import { services } from "../../services";
 import contactImg from "../../../../contact.png";
 
@@ -10,7 +11,7 @@ export function Contact() {
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedType, setSelectedType] = useState<string>(projectTypes[0]);
+  const [selectedType, setSelectedType] = useState<string>("");
   const [noteOpen, setNoteOpen] = useState(false);
   const [form, setForm] = useState({
     name: "",
@@ -25,13 +26,20 @@ export function Contact() {
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setForm((prev) => ({ ...prev, [key]: e.target.value }));
 
+  const [typePrompt, setTypePrompt] = useState(false);
+
   const selectType = (t: string) =>
     setSelectedType((prev) => {
+      // Clear the "pick a type first" nudge as soon as user selects anything.
+      setTypePrompt(false);
+
       if (prev === t) {
         // Tapping the active one deselects it; if it's "Other", close the note too.
         if (t === "Other") setNoteOpen(false);
         return "";
       }
+      // Switching away from "Other" — auto-close the note box.
+      if (prev === "Other" && t !== "Other") setNoteOpen(false);
       // "Other" needs detail, so reveal the note automatically.
       if (t === "Other") setNoteOpen(true);
       return t;
@@ -45,7 +53,7 @@ export function Contact() {
 
   const resetForm = () => {
     setForm({ name: "", email: "", company: "", message: "", website: "" });
-    setSelectedType(projectTypes[0]);
+    setSelectedType("");
     setNoteOpen(false);
     setError(null);
   };
@@ -118,20 +126,20 @@ export function Contact() {
               </div>
             </div>
 
-            <div className="relative flex-1 min-h-[220px] overflow-hidden">
+            <MediaFrame className="flex-1 min-h-[220px]">
               <ImageWithFallback
                 src={contactImg}
                 alt="Get in touch with Kaizen"
                 className="absolute inset-0 w-full h-full object-cover"
               />
-            </div>
+            </MediaFrame>
           </div>
 
           <div className="md:col-span-7">
             {sent ? (
               <div className="bg-paper border border-border p-10 text-center">
                 <span className="rule-red" />
-                <h2 className="font-serif mt-4">Thank you, note received.</h2>
+                <h2 className="font-serif mt-4">Thank you, message received.</h2>
                 <p className="mt-4 text-ink/70 max-w-md mx-auto">
                   We'll be in touch within two working days.
                 </p>
@@ -212,20 +220,33 @@ export function Contact() {
 
                 <div>
                   {!noteOpen && (
-                    <button
-                      type="button"
-                      onClick={() => setNoteOpen(true)}
-                      style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
-                      className="pill pill-ghost !py-2 !px-4 text-sm"
-                    >
-                      + Add a note
-                    </button>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!selectedType) {
+                            setTypePrompt(true);
+                            return;
+                          }
+                          setNoteOpen(true);
+                        }}
+                        style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+                        className="pill pill-ghost !py-2 !px-4 text-sm"
+                      >
+                        + Add a message
+                      </button>
+                      {typePrompt && (
+                        <span className="text-sm text-red animate-fade-in">
+                          Please select a project type first.
+                        </span>
+                      )}
+                    </div>
                   )}
                   {/* Grid-rows trick gives a smooth open/close height transition */}
                   <div className="note-collapse" data-open={noteOpen}>
                     <div>
                       <div className="flex items-center justify-between mb-3">
-                        <label className="eyebrow">Note</label>
+                        <label className="eyebrow">Message</label>
                         <button
                           type="button"
                           onClick={closeNote}
@@ -257,14 +278,14 @@ export function Contact() {
 
                 <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
                   <p className="text-sm text-ink/55">
-                    We reply to every note, usually within 48 hours.
+                    We reply to every message, usually within 48 hours.
                   </p>
                   <button
                     type="submit"
                     disabled={sending}
                     className="pill pill-primary disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    {sending ? "Sending…" : "Send note →"}
+                    {sending ? "Sending…" : "Send message →"}
                   </button>
                 </div>
               </form>

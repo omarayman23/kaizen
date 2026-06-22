@@ -6,7 +6,7 @@
   /* ── Type scale: exactly three content sizes ── */
   --text-heading: clamp(1.5rem, 4.2vw, 3.75rem); /* hero / page titles */
   --text-title: clamp(1.5rem, 4vw, 3.25rem);     /* section + capability titles */
-  --text-body: 1.0625rem;                         /* all prose, links, labels */
+  --text-body: 1.1rem;                         /* all prose, links, labels */
 
   /* Kaizen demo palette */
   --ink: #1b2a4a;
@@ -171,7 +171,7 @@
   }
   p em.italic { font-weight: 500; }
 
-  p { line-height: 1.65; color: var(--muted-ink); }
+  p { line-height: 1.65; color: var(--ink); font-size: 1.075rem; }
   p strong { color: var(--ink); }
 
   button { font-family: var(--font-sans); font-weight: 600; }
@@ -182,6 +182,22 @@
 
 @layer utilities {
   .font-serif, .font-sans { font-family: var(--font-sans); }
+
+  /* Body prose: solid black and a step larger than the muted defaults.
+     `:not([class*="text-paper"])` out-specifies the text-ink/NN opacity
+     utilities while leaving white-on-dark paragraphs untouched. Captions
+     that opt into `text-sm` keep their smaller size but still go black.
+     `:not(:where(footer *))` is zero-specificity, so it scopes the rule out
+     of the footer (which keeps its own modest, muted typography). */
+  p:not([class*="text-paper"]):not(:where(footer *)) { color: #000; }
+  p:not([class*="text-paper"]):not(.text-sm):not(:where(footer *)) {
+    font-size: clamp(1.15rem, 1.05rem + 0.4vw, 1.3rem);
+    line-height: 1.6;
+  }
+
+  /* Footer prose sits at the shared body size so the company statement
+     matches the nav links beside it. */
+  footer p { font-size: var(--text-body); }
 
   /* Kaizen-style left-aligned section eyebrow */
   .section-label {
@@ -293,6 +309,41 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
+  /* Hero image: a slow, one-time settle-zoom on load so the hero breathes
+     instead of sitting flat. */
+  .hero-img {
+    animation: heroSettle 7s cubic-bezier(.2,.7,.2,1) both;
+    transform-origin: 60% 45%;
+    will-change: transform;
+  }
+  @keyframes heroSettle {
+    from { transform: scale(1.12); }
+    to   { transform: scale(1); }
+  }
+
+  /* Editorial image frame: content is clipped, so a scroll-in wipe and a
+     gentle hover zoom read as intentional motion, not decoration. */
+  .media-frame { position: relative; overflow: hidden; }
+  .media-frame img {
+    transition: transform 1.1s cubic-bezier(.2,.7,.2,1), filter .6s ease;
+    will-change: transform;
+  }
+  .media-frame:hover img,
+  .media-frame:focus-within img { transform: scale(1.06); }
+
+  /* Entrance wipe as a pure enhancement: the image is fully visible by
+     default (no animation on the base state) and only plays a one-time
+     wipe-in when the MediaFrame observer adds `.is-visible`. With no
+     persistent hidden state the image can never get stuck invisible if the
+     observer never fires. */
+  .media-reveal.is-visible img {
+    animation: mediaWipe 1s cubic-bezier(.2,.7,.2,1);
+  }
+  @keyframes mediaWipe {
+    from { clip-path: inset(0 0 100% 0); opacity: 0; }
+    to   { clip-path: inset(0 0 0 0); opacity: 1; }
+  }
+
   .marquee { animation: marquee 40s linear infinite; }
   @keyframes marquee {
     from { transform: translateX(0); }
@@ -302,29 +353,22 @@
   .hover-list:hover > *:not(:hover) { opacity: 0.45; }
   .hover-list > * { transition: opacity .35s ease; }
 
-  /* Mobile / iPhone tightening */
-  @media (max-width: 640px) {
-    html { font-size: 14px; }
-    .pill { padding: 0.7rem 1.2rem; font-size: 0.7rem; }
-    /* Keep eyebrows small on phones (was 0.95rem — larger than desktop, which
-       caused long uppercase labels to wrap and break alignment) */
-    .eyebrow, .section-label span { font-size: 0.72rem; letter-spacing: 0.1em; }
-    img, svg, video { max-width: 100%; height: auto; }
-  }
 
-  /* Animated buttons: scale up on hover */
+
+
+  /* Animated buttons: a subtle lift on hover — no size change. */
   .pill-animated {
-    transition: transform .35s cubic-bezier(.2,.7,.2,1),
+    transition: transform .3s cubic-bezier(.2,.7,.2,1),
                 background-color .25s,
                 color .25s,
                 border-color .25s,
-                box-shadow .35s ease;
+                box-shadow .3s ease;
   }
   .pill-animated:hover {
-    transform: scale(1.08);
-    box-shadow: 0 8px 24px -8px rgba(27,42,74,0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px -10px rgba(27,42,74,0.4);
   }
-  .pill-animated:active { transform: scale(1.02); }
+  .pill-animated:active { transform: translateY(0); }
 
   /* Animated count-up number: slides up + fades when in view */
   .count-rise {
@@ -352,4 +396,72 @@
     100% { background-color: transparent; }
   }
   .box-flash { animation: boxFlash 1.3s ease-out; }
+
+  /* Capability cards: enhanced hover shadow */
+  .capability-card:hover {
+    box-shadow: 0 12px 40px -8px rgba(0,0,0,0.45);
+  }
+
+  /* Logo pulse: subtle scale-down-then-up when clicking logo on home page */
+  @keyframes logoPulse {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(0.88); }
+    100% { transform: scale(1); }
+  }
+  .logo-pulse { animation: logoPulse 0.35s ease-in-out; }
+
+  /* Fade-in for inline prompts */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-in { animation: fadeIn 0.3s ease-out both; }
+
+  /* ── iPhone / mobile readability ──
+     Goal: text stays readable (min ~15px), only images shrink.
+     Logo is slightly bigger, everything centered with safe padding. */
+  @media (max-width: 640px) {
+    /* Override the base 14px — keep text large enough to read without zooming */
+    html { font-size: 15px; }
+
+    /* Body prose minimum */
+    body { font-size: 1rem; line-height: 1.7; }
+
+    /* Headings: floor values to stay readable on small screens */
+    h1 { font-size: clamp(1.55rem, 6.5vw, 2.2rem); }
+    h2 { font-size: clamp(1.35rem, 5.5vw, 1.85rem); }
+    h3 { font-size: clamp(1.05rem, 4vw, 1.4rem); }
+    h4 { font-size: clamp(0.95rem, 3.5vw, 1.15rem); }
+
+    /* Header logo bigger on mobile for branding presence */
+    header img[alt="Kaizen"] { height: 4.25rem; }
+
+    /* Footer logo a touch bigger too */
+    footer img[alt="Kaizen"] { height: 6.5rem; }
+
+    /* Buttons / pills: keep tap targets comfy and text readable */
+    .pill { padding: 0.7rem 1.2rem; font-size: 0.72rem; }
+
+    /* Eyebrows: readable but not oversized */
+    .eyebrow, .section-label span { font-size: 0.72rem; letter-spacing: 0.1em; }
+
+    /* Images/media always scale down, text should not */
+    img, svg, video { max-width: 100%; height: auto; }
+
+    /* Ensure all page containers have comfortable side padding */
+    section > div { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
+
+    /* Tables: keep text legible, allow horizontal scroll if needed */
+    table { font-size: 0.95rem; }
+    td, th { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+
+    /* FAQ questions: readable on small screens */
+    .faq-collapse p { font-size: 0.95rem; }
+
+    /* Contact project-type pills: slightly more padding so they're tappable */
+    [role="radiogroup"] .pill { padding: 0.55rem 0.85rem; font-size: 0.72rem; }
+
+    /* Legal pages: prose line-height boost for readability */
+    section .text-ink\\/80 { line-height: 1.75; }
+  }
 }

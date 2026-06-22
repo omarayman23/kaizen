@@ -12,19 +12,7 @@ import { Privacy } from "./components/pages/Privacy";
 import { Terms } from "./components/pages/Terms";
 import { FAQ } from "./components/pages/FAQ";
 import { useRoute } from "./useRoute";
-import type { Page } from "./components/Nav";
-
-// Browser-tab title per page (home keeps the brand; others are just the page).
-const TITLES: Record<Page, string> = {
-  home: "Kaizen - Home",
-  about: "About Us",
-  services: "Capabilities",
-  contract: "Our Work",
-  contact: "Contact",
-  faq: "FAQ",
-  privacy: "Privacy",
-  terms: "Terms",
-};
+import { useSeo } from "./useSeo";
 
 // This app's scroll container is the <body> (the html/body height:100% +
 // overflow setup makes the body itself scroll, not the window), so a plain
@@ -39,6 +27,10 @@ export default function App() {
   const { page, category, navigate } = useRoute();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // Keep title, meta description, canonical, social tags and breadcrumbs in
+  // sync with the current route.
+  useSeo(page);
+
   // On first load / refresh, don't restore the previous scroll position —
   // always begin at the top.
   useEffect(() => {
@@ -47,11 +39,6 @@ export default function App() {
     }
     scrollToTop();
   }, []);
-
-  // Keep the browser-tab title in sync with the current page.
-  useEffect(() => {
-    document.title = TITLES[page];
-  }, [page]);
 
   const renderPage = () => {
     switch (page) {
