@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
-import { Nav, type Page } from "./components/Nav";
+import { Nav } from "./components/Nav";
 import { Footer } from "./components/Footer";
 import { QuickReach } from "./components/QuickReach";
 import { Home } from "./components/pages/Home";
@@ -8,6 +8,7 @@ import { About } from "./components/pages/About";
 import { Services } from "./components/pages/Services";
 import { ContractVehicles } from "./components/pages/ContractVehicles";
 import { Contact } from "./components/pages/Contact";
+import { useRoute } from "./useRoute";
 
 // This app's scroll container is the <body> (the html/body height:100% +
 // overflow setup makes the body itself scroll, not the window), so a plain
@@ -19,14 +20,8 @@ function scrollToTop() {
 }
 
 export default function App() {
-  const [page, setPage] = useState<Page>("home");
-  const [category, setCategory] = useState<string | undefined>(undefined);
+  const { page, category, navigate } = useRoute();
   const [menuOpen, setMenuOpen] = useState(false);
-
-  const navigate = (p: Page, opts?: { category?: string }) => {
-    setCategory(opts?.category);
-    setPage(p);
-  };
 
   // On first load / refresh, don't restore the previous scroll position —
   // always begin at the top.
@@ -58,9 +53,7 @@ export default function App() {
         <Nav page={page} setPage={navigate} open={menuOpen} setOpen={setMenuOpen} />
 
         {/* mode="wait": the current page fully fades out, THEN we snap to the
-            top (onExitComplete), THEN the next page fades up from there — so
-            every navigation lands at the top of the new page. Keying on page +
-            category means switching service categories transitions too. */}
+            top (onExitComplete), THEN the next page fades up from there. */}
         <AnimatePresence mode="wait" onExitComplete={scrollToTop}>
           <motion.main
             key={`${page}:${category ?? ""}`}
