@@ -115,6 +115,10 @@
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     overflow-x: hidden;
+    /* No rubber-band white flash, and no pinch-zoom (vertical scroll stays) */
+    overscroll-behavior: none;
+    touch-action: pan-y;
+    background: var(--paper);
   }
 
   body {
@@ -128,6 +132,7 @@
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
     max-width: 100%;
+    overscroll-behavior: none;
   }
 
   /* Long words (URLs, headings) should wrap instead of forcing a wider page */
