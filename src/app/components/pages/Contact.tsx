@@ -10,7 +10,7 @@ export function Contact() {
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([projectTypes[0]]);
+  const [selectedType, setSelectedType] = useState<string>(projectTypes[0]);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -24,14 +24,11 @@ export function Contact() {
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setForm((prev) => ({ ...prev, [key]: e.target.value }));
 
-  const toggleType = (t: string) =>
-    setSelectedTypes((prev) =>
-      prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]
-    );
+  const selectType = (t: string) => setSelectedType(t);
 
   const resetForm = () => {
     setForm({ name: "", email: "", company: "", message: "", website: "" });
-    setSelectedTypes([projectTypes[0]]);
+    setSelectedType(projectTypes[0]);
     setError(null);
   };
 
@@ -43,7 +40,7 @@ export function Contact() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, projectTypes: selectedTypes }),
+        body: JSON.stringify({ ...form, projectType: selectedType }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -175,14 +172,17 @@ export function Contact() {
 
                 <div>
                   <label className="eyebrow block mb-3">Project type</label>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Project type">
                     {projectTypes.map((t) => {
-                      const active = selectedTypes.includes(t);
+                      const active = selectedType === t;
                       return (
                         <button
                           type="button"
+                          role="radio"
+                          aria-checked={active}
                           key={t}
-                          onClick={() => toggleType(t)}
+                          onClick={() => selectType(t)}
+                          style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
                           className={`pill ${active ? "pill-primary" : "pill-ghost"} !py-2 !px-4 text-sm`}
                         >
                           {t}
