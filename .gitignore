@@ -14,10 +14,9 @@ pnpm-debug.log*
 .vscode
 .idea
 
-# env
+# env — never commit secrets (Resend API key etc.); set them in Vercel instead
 .env
-.env.local
-.env.*.local
+.env.*
 
 # vercel
 .vercel
