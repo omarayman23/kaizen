@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { ImageWithFallback } from "../figma/ImageWithFallback";
 import { services } from "../../services";
@@ -8,12 +8,58 @@ const projectTypes = [...services.map((s) => s.title), "Other"];
 
 export function Contact() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([projectTypes[0]]);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    company: "",
+    message: "",
+    website: "", // honeypot — stays empty for real users
+  });
+
+  const update =
+    (key: keyof typeof form) =>
+    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setForm((prev) => ({ ...prev, [key]: e.target.value }));
 
   const toggleType = (t: string) =>
     setSelectedTypes((prev) =>
       prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]
     );
+
+  const resetForm = () => {
+    setForm({ name: "", email: "", company: "", message: "", website: "" });
+    setSelectedTypes([projectTypes[0]]);
+    setError(null);
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSending(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, projectTypes: selectedTypes }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "Something went wrong. Please try again.");
+      }
+      setSent(true);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "We couldn't send your message. Please try again."
+      );
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
     <div className="fade-up">
@@ -74,23 +120,58 @@ export function Contact() {
                 <p className="mt-4 text-ink/70 max-w-md mx-auto">
                   We'll be in touch within two working days.
                 </p>
-                <button onClick={() => setSent(false)} className="pill pill-ghost mt-8">
+                <button
+                  onClick={() => {
+                    resetForm();
+                    setSent(false);
+                  }}
+                  className="pill pill-ghost mt-8"
+                >
                   Send another →
                 </button>
               </div>
             ) : (
               <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setSent(true);
-                }}
+                onSubmit={handleSubmit}
                 className="bg-paper border border-border p-8 md:p-10 space-y-7"
               >
-                <div className="grid md:grid-cols-2 gap-6">
-                  <Field label="Your name" placeholder="Jane Hart" />
-                  <Field label="Email" type="email" placeholder="jane@agency.gov" />
+                {/* Honeypot: hidden from users, catches bots. */}
+                <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+                  <label>
+                    Don't fill this out
+                    <input
+                      type="text"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={form.website}
+                      onChange={update("website")}
+                    />
+                  </label>
                 </div>
-                <Field label="Company / Agency" placeholder="Organization" />
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <Field
+                    label="Your name"
+                    placeholder="Jane Hart"
+                    value={form.name}
+                    onChange={update("name")}
+                    required
+                  />
+                  <Field
+                    label="Email"
+                    type="email"
+                    placeholder="jane@agency.gov"
+                    value={form.email}
+                    onChange={update("email")}
+                    required
+                  />
+                </div>
+                <Field
+                  label="Company / Agency"
+                  placeholder="Organization"
+                  value={form.company}
+                  onChange={update("company")}
+                />
 
                 <div>
                   <label className="eyebrow block mb-3">Project type</label>
@@ -115,17 +196,33 @@ export function Contact() {
                   <label className="eyebrow block mb-3">Tell us about the project</label>
                   <textarea
                     rows={5}
+                    required
+                    value={form.message}
+                    onChange={update("message")}
                     placeholder="A paragraph is plenty. Links welcome."
                     className="w-full bg-cream border border-border p-4 outline-none focus:border-navy transition-colors resize-none"
                   />
                 </div>
 
+                {error && (
+                  <p
+                    role="alert"
+                    className="border-l-2 border-red bg-red/5 px-4 py-3 text-sm text-red"
+                  >
+                    {error}
+                  </p>
+                )}
+
                 <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
                   <p className="text-sm text-ink/55">
                     We reply to every note, usually within 48 hours.
                   </p>
-                  <button type="submit" className="pill pill-primary">
-                    Send note →
+                  <button
+                    type="submit"
+                    disabled={sending}
+                    className="pill pill-primary disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {sending ? "Sending…" : "Send note →"}
                   </button>
                 </div>
               </form>
@@ -141,17 +238,29 @@ function Field({
   label,
   placeholder,
   type = "text",
+  value,
+  onChange,
+  required = false,
 }: {
   label: string;
   placeholder?: string;
   type?: string;
+  value: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean;
 }) {
   return (
     <div>
-      <label className="eyebrow block mb-2">{label}</label>
+      <label className="eyebrow block mb-2">
+        {label}
+        {required && <span className="text-red"> *</span>}
+      </label>
       <input
         type={type}
         placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        required={required}
         className="w-full bg-transparent border-b border-border py-3 outline-none focus:border-navy transition-colors"
       />
     </div>
